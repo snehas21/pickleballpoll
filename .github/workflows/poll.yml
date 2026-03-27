@@ -1,12 +1,12 @@
 name: Pickleball Availability Poller
 
 on:
-  # Run every 30 minutes
   schedule:
     - cron: '*/30 * * * *'
-
-  # Allow triggering manually from the GitHub Actions UI
   workflow_dispatch:
+
+permissions:
+  contents: write   # needed to commit runs.json back to the repo
 
 jobs:
   poll:
@@ -17,6 +17,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # fetch full history so we can pull & push cleanly
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -44,6 +47,16 @@ jobs:
 
       - name: Run availability check
         run: node poll-once.js
+
+      - name: Commit updated run history
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin ${{ github.ref_name }}
+          git add runs.json
+          # Only commit if runs.json actually changed
+          git diff --cached --quiet || git commit -m "chore: update run history [skip ci]"
+          git push origin ${{ github.ref_name }}
 
       - name: Upload error screenshots (if any)
         if: failure()

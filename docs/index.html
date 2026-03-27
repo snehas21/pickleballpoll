@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pickleball Poller — Richmond Hill</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:      #276749;
+      --green-dark: #22543d;
+      --green-bg:   #f0fff4;
+      --green-mid:  #9ae6b4;
+      --blue-bg:    #ebf8ff;
+      --blue:       #2b6cb0;
+      --blue-mid:   #bee3f8;
+      --red-bg:     #fff5f5;
+      --red:        #c53030;
+      --red-mid:    #fed7d7;
+      --gray:       #718096;
+      --gray-light: #f7fafc;
+      --border:     #e2e8f0;
+      --text:       #1a202c;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #edf2f7;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    /* ── Header ── */
+    .header {
+      max-width: 960px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .header-left { display: flex; align-items: center; gap: 0.6rem; }
+    .header-left .emoji { font-size: 1.8rem; }
+    .header-left h1 { font-size: 1.4rem; font-weight: 700; color: var(--green-dark); }
+    .header-left p  { font-size: 0.8rem; color: var(--gray); margin-top: 1px; }
+
+    .header-right { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+    .badge {
+      border-radius: 999px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
+    .badge-blue  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-mid);  }
+
+    .icon-btn {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.78rem;
+      color: var(--gray);
+      transition: background 0.1s, border-color 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .icon-btn:hover { background: var(--gray-light); border-color: #cbd5e0; }
+
+    /* ── Stats ── */
+    .stats {
+      max-width: 960px;
+      margin: 0 auto 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+    }
+    .stat-card .label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 0.35rem; }
+    .stat-card .value { font-size: 1.5rem; font-weight: 700; color: var(--text); line-height: 1; }
+    .stat-card .sub   { font-size: 0.72rem; color: var(--gray); margin-top: 0.3rem; }
+
+    /* ── Main grid ── */
+    .main {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 720px) { .main { grid-template-columns: 1fr; } }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-header h2 { font-size: 0.9rem; font-weight: 600; }
+    .card-body { padding: 1.25rem; }
+
+    /* ── Poll button ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.15s, transform 0.1s;
+      margin-bottom: 1rem;
+    }
+    .btn:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:disabled { background: #a0aec0; cursor: not-allowed; }
+
+    .spinner {
+      display: none;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    .btn.loading .spinner { display: block; }
+    .btn.loading .btn-text { opacity: 0.75; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Info box ── */
+    .info-box {
+      background: var(--blue-bg);
+      border: 1px solid var(--blue-mid);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.78rem;
+      color: var(--blue);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .info-box a { color: var(--blue); }
+
+    .last-run-box {
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.78rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+    .last-run-box strong { color: var(--text); }
+
+    /* ── History table ── */
+    .history-scroll { max-height: 420px; overflow-y: auto; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    thead th {
+      text-align: left;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--gray);
+      border-bottom: 2px solid var(--border);
+      position: sticky; top: 0;
+      background: #fff;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-light); }
+    tbody td { padding: 0.6rem 0.85rem; vertical-align: middle; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      border-radius: 999px;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .pill-success  { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
+    .pill-no-spots { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-mid);  }
+    .pill-error    { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-mid);   }
+    .pill-running  { background: #fffbeb; color: #b7791f; border: 1px solid #fbd38d; }
+
+    .email-yes { color: var(--green); font-weight: 600; }
+    .email-no  { color: #cbd5e0; }
+
+    .trigger-badge {
+      font-size: 0.65rem; color: var(--gray);
+      background: var(--gray-light); border: 1px solid var(--border);
+      border-radius: 4px; padding: 0.1rem 0.4rem;
+    }
+
+    .spots-list { margin: 0; padding: 0; list-style: none; }
+    .spots-list li { font-size: 0.7rem; color: var(--gray); }
+    .spots-list li::before { content: '• '; color: var(--green); }
+
+    .empty-state { text-align: center; padding: 2.5rem; color: var(--gray); font-size: 0.82rem; }
+
+    /* ── PAT modal ── */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1.75rem 2rem;
+      width: 100%; max-width: 440px;
+      margin: 1rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .modal h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .modal p  { font-size: 0.82rem; color: var(--gray); line-height: 1.6; margin-bottom: 1rem; }
+    .modal ol { font-size: 0.82rem; color: var(--gray); padding-left: 1.25rem; line-height: 2; margin-bottom: 1rem; }
+    .modal ol a { color: var(--blue); }
+    .modal input[type="text"], .modal input[type="password"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+      outline: none;
+    }
+    .modal input:focus { border-color: var(--green); box-shadow: 0 0 0 2px rgba(39,103,73,0.15); }
+    .modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+    .btn-sm {
+      border: none; border-radius: 7px;
+      padding: 0.5rem 1rem; font-size: 0.82rem; font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-sm-primary { background: var(--green); color: #fff; }
+    .btn-sm-primary:hover { background: var(--green-dark); }
+    .btn-sm-ghost { background: var(--gray-light); color: var(--gray); border: 1px solid var(--border); }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 1.5rem; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--green-dark); color: #fff;
+      padding: 0.6rem 1.3rem; border-radius: 999px;
+      font-size: 0.85rem; font-weight: 500;
+      transition: transform 0.3s ease;
+      z-index: 999; pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <span class="emoji">🏓</span>
+    <div>
+      <h1>Pickleball Poller</h1>
+      <p>Richmond Hill — Active Communities</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="badge badge-green">Drop-in sessions</span>
+    <span class="badge badge-blue">Ages 40–50</span>
+    <span class="badge badge-blue">Every 30 min</span>
+    <button class="icon-btn" onclick="openPatModal()" title="GitHub token settings">&#9881; Settings</button>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat-card">
+    <div class="label">Total runs</div>
+    <div class="value" id="statTotal">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Spots found</div>
+    <div class="value" id="statSpots">—</div>
+    <div class="sub">across all runs</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Emails sent</div>
+    <div class="value" id="statEmails">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Last checked</div>
+    <div class="value" id="statLast" style="font-size:0.95rem">—</div>
+    <div class="sub" id="statLastStatus"></div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Left: controls -->
+  <div class="card">
+    <div class="card-header"><h2>Controls</h2></div>
+    <div class="card-body">
+      <button class="btn" id="pollBtn" onclick="triggerPoll()">
+        <div class="spinner"></div>
+        <span class="btn-text">&#9654; Poll Now</span>
+      </button>
+
+      <div class="info-box" id="patHint">
+        To use Poll Now, add your GitHub token in
+        <a href="#" onclick="openPatModal();return false">Settings</a>.
+        The token needs <strong>workflow</strong> permission.
+      </div>
+
+      <div class="last-run-box" id="lastRunBox">
+        <div id="lastRunContent">Loading last run…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: history -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Run History</h2>
+      <button class="icon-btn" onclick="loadHistory()">&#8635; Refresh</button>
+    </div>
+    <div class="history-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Started</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Spots</th>
+            <th>Email</th>
+            <th>By</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <tr><td colspan="6" class="empty-state">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- PAT modal -->
+<div class="overlay" id="overlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal">
+    <h3>GitHub Token</h3>
+    <p>A Personal Access Token (PAT) lets the Poll Now button trigger a GitHub Actions run directly from this page. It's stored only in your browser.</p>
+    <ol>
+      <li>Go to <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a></li>
+      <li>Select scope: <strong>workflow</strong></li>
+      <li>Generate and paste below</li>
+    </ol>
+    <input type="password" id="patInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+    <div class="modal-actions">
+      <button class="btn-sm btn-sm-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn-sm btn-sm-primary" onclick="savePat()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Config ────────────────────────────────────────────────────────────────────
+  const GITHUB_OWNER   = 'snehas21';
+  const GITHUB_REPO    = 'pickleballpoll';
+  const GITHUB_BRANCH  = 'main';
+  const WORKFLOW_FILE  = 'poll.yml';
+
+  const RUNS_JSON_URL =
+    `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/runs.json`;
+
+  // ── PAT helpers ───────────────────────────────────────────────────────────────
+  function getPat()       { return localStorage.getItem('gh_pat') || ''; }
+  function savePat()      {
+    const val = document.getElementById('patInput').value.trim();
+    if (!val) { showToast('Token cannot be empty'); return; }
+    localStorage.setItem('gh_pat', val);
+    closeModal();
+    updatePatHint();
+    showToast('Token saved');
+  }
+  function openPatModal() {
+    document.getElementById('patInput').value = getPat();
+    document.getElementById('overlay').classList.add('open');
+  }
+  function closeModal()   { document.getElementById('overlay').classList.remove('open'); }
+  function closeModalOnOverlay(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+  function updatePatHint() {
+    const hint = document.getElementById('patHint');
+    if (getPat()) {
+      hint.style.display = 'none';
+      document.getElementById('pollBtn').disabled = false;
+    } else {
+      hint.style.display = 'block';
+      document.getElementById('pollBtn').disabled = true;
+    }
+  }
+
+  // ── Poll Now ──────────────────────────────────────────────────────────────────
+  async function triggerPoll() {
+    const pat = getPat();
+    if (!pat) { openPatModal(); return; }
+
+    const btn = document.getElementById('pollBtn');
+    btn.disabled = true;
+    btn.classList.add('loading');
+
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${WORKFLOW_FILE}/dispatches`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${pat}`,
+            'Accept': 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ref: GITHUB_BRANCH }),
+        }
+      );
+
+      if (res.status === 204) {
+        showToast('Poll triggered! Check Actions tab for progress.');
+        // Refresh history after a short delay to pick up the new run
+        setTimeout(loadHistory, 8000);
+      } else if (res.status === 401) {
+        showToast('Token invalid or expired — check Settings');
+        localStorage.removeItem('gh_pat');
+        updatePatHint();
+      } else if (res.status === 403) {
+        showToast('Token missing "workflow" permission');
+      } else {
+        const body = await res.json().catch(() => ({}));
+        showToast(`Error ${res.status}: ${body.message || 'Unknown error'}`);
+      }
+    } catch (e) {
+      showToast('Network error — are you online?');
+    } finally {
+      setTimeout(() => { btn.disabled = !getPat(); btn.classList.remove('loading'); }, 3000);
+    }
+  }
+
+  // ── Load history ──────────────────────────────────────────────────────────────
+  async function loadHistory() {
+    const res = await fetch(`${RUNS_JSON_URL}?_=${Date.now()}`).catch(() => null);
+    if (!res || !res.ok) {
+      document.getElementById('historyBody').innerHTML =
+        `<tr><td colspan="6" class="empty-state">Could not load history. Make sure the repo is public and runs.json exists.</td></tr>`;
+      return;
+    }
+
+    const runs = await res.json();
+    updateStats(runs);
+    updateLastRun(runs);
+
+    const tbody = document.getElementById('historyBody');
+    if (runs.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state">No runs yet — trigger a poll to get started.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = runs.map(run => {
+      const started  = run.startedAt  ? fmtDate(run.startedAt)  : '—';
+      const duration = (run.startedAt && run.finishedAt)
+        ? `${Math.round((new Date(run.finishedAt) - new Date(run.startedAt)) / 1000)}s`
+        : run.status === 'running' ? '…' : '—';
+
+      const statusPill = {
+        success:  `<span class="pill pill-success">&#10003; Spots found</span>`,
+        no_spots: `<span class="pill pill-no-spots">No spots</span>`,
+        error:    `<span class="pill pill-error" title="${escHtml(run.error || '')}">&#10007; Error</span>`,
+        running:  `<span class="pill pill-running">Running…</span>`,
+      }[run.status] || `<span class="pill">${escHtml(run.status)}</span>`;
+
+      const spotsCell = run.spotsFound && run.spotsFound.length > 0
+        ? `<ul class="spots-list">${run.spotsFound.map(s => `<li>${escHtml(s.name)}</li>`).join('')}</ul>`
+        : `<span style="color:#cbd5e0">—</span>`;
+
+      const emailCell = run.emailSent
+        ? `<span class="email-yes">&#10003; Sent</span>`
+        : `<span class="email-no">—</span>`;
+
+      return `<tr>
+        <td style="white-space:nowrap">${started}</td>
+        <td style="color:var(--gray)">${duration}</td>
+        <td>${statusPill}</td>
+        <td>${spotsCell}</td>
+        <td>${emailCell}</td>
+        <td><span class="trigger-badge">${escHtml(run.triggeredBy || 'schedule')}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function updateStats(runs) {
+    const totalSpots  = runs.reduce((s, r) => s + (r.spotsFound ? r.spotsFound.length : 0), 0);
+    const totalEmails = runs.filter(r => r.emailSent).length;
+    const last        = runs.find(r => r.status !== 'running');
+
+    document.getElementById('statTotal').textContent  = runs.length;
+    document.getElementById('statSpots').textContent  = totalSpots;
+    document.getElementById('statEmails').textContent = totalEmails;
+
+    if (last) {
+      document.getElementById('statLast').textContent       = fmtDate(last.finishedAt || last.startedAt);
+      document.getElementById('statLastStatus').textContent =
+        last.status === 'success'  ? '&#128994; Spots found' :
+        last.status === 'no_spots' ? '&#128309; None available' :
+        last.status === 'error'    ? '&#128308; Error' : '';
+    }
+  }
+
+  function updateLastRun(runs) {
+    const last = runs[0];
+    const box  = document.getElementById('lastRunContent');
+    if (!last) { box.innerHTML = 'No runs recorded yet.'; return; }
+
+    const ago = last.startedAt ? timeAgo(last.startedAt) : '';
+    const statusLabel =
+      last.status === 'success'  ? '&#x2705; Spots found — email sent!' :
+      last.status === 'no_spots' ? 'No open spots found' :
+      last.status === 'error'    ? `&#x274C; Error: ${escHtml(last.error || '')}` :
+      last.status === 'running'  ? '&#x23F3; Poll in progress…' : last.status;
+
+    box.innerHTML = `
+      <strong>Last run</strong> &mdash; ${ago}<br>
+      ${statusLabel}<br>
+      <span style="font-size:0.7rem">${fmtDate(last.startedAt)} &bull; ${escHtml(last.triggeredBy || 'schedule')}</span>
+    `;
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────────
+  function fmtDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
+      + ' ' + d.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function timeAgo(iso) {
+    const sec = Math.round((Date.now() - new Date(iso)) / 1000);
+    if (sec < 60)   return `${sec}s ago`;
+    if (sec < 3600) return `${Math.floor(sec/60)}m ago`;
+    if (sec < 86400)return `${Math.floor(sec/3600)}h ago`;
+    return `${Math.floor(sec/86400)}d ago`;
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────────
+  updatePatHint();
+  loadHistory();
+  setInterval(loadHistory, 60000);   // auto-refresh every 60s
+</script>
+</body>
+</html>
