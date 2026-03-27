@@ -1,11 +1,12 @@
 require('dotenv').config();
 const { chromium } = require('playwright');
-const nodemailer = require('nodemailer');
+const nodemailer   = require('nodemailer');
+const history      = require('./history');
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
-const BASE_URL = 'https://anc.ca.apm.activecommunities.com/richmondhill';
-const SEARCH_KEYWORD = 'pickleball';
+const BASE_URL        = 'https://anc.ca.apm.activecommunities.com/richmondhill';
+const SEARCH_KEYWORD  = 'pickleball';
 const POLL_INTERVAL_MS = (parseInt(process.env.POLL_INTERVAL_MINUTES) || 30) * 60 * 1000;
 
 const TARGET_DAYS = process.env.TARGET_DAYS
@@ -40,8 +41,8 @@ function onLog(fn) {
 // ─── Email ────────────────────────────────────────────────────────────────────
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT) || 587,
+  host:   process.env.SMTP_HOST || 'smtp.gmail.com',
+  port:   parseInt(process.env.SMTP_PORT) || 587,
   secure: false,
   auth: {
     user: process.env.SMTP_USER,
@@ -55,8 +56,8 @@ async function sendAlert(spots) {
     .join('\n');
 
   await transporter.sendMail({
-    from: process.env.SMTP_USER,
-    to: process.env.NOTIFY_EMAIL,
+    from:    process.env.SMTP_USER,
+    to:      process.env.NOTIFY_EMAIL,
     subject: `🏓 Pickleball drop-in spot(s) available in Richmond Hill!`,
     text: `The following pickleball drop-in session(s) just opened up (ages ${AGE_MIN}–${AGE_MAX}):\n\n${spotLines}\n\nBook now: ${BASE_URL}/activities/search?query=pickleball\n`,
     html: `
@@ -89,44 +90,35 @@ function isInTargetTime(timeStr) {
 
 /**
  * Returns true if this activity is open to someone aged 40–50.
- * Handles patterns like:
- *   "Ages 18+"  "40-60 years"  "Adult (18+)"  "Senior (55+)"  "Youth (12-17)"
  */
 function isAgeEligible(text) {
   if (!text) return true;
-
-  // Explicit senior-only markers (55+, 60+, 65+)
   if (/senior|55\+|60\+|65\+|ages?\s*5[5-9]|ages?\s*6\d/i.test(text)) return false;
-
-  // Explicit youth/junior only
   if (/youth|junior|child|teen|ages?\s*[0-1]?\d\s*[-–]\s*[1-3]\d/i.test(text)) return false;
 
-  // Explicit range like "40-60" or "35-55" — check overlap with 40–50
   const rangeMatch = text.match(/ages?\s*(\d+)\s*[-–to]+\s*(\d+)/i);
   if (rangeMatch) {
     const lo = parseInt(rangeMatch[1]);
     const hi = parseInt(rangeMatch[2]);
-    // Eligible if ranges overlap: lo <= AGE_MAX AND hi >= AGE_MIN
     return lo <= AGE_MAX && hi >= AGE_MIN;
   }
 
-  // Minimum age only, e.g. "18+" or "Ages 18+"
   const minAgeMatch = text.match(/ages?\s*(\d+)\s*\+/i) || text.match(/(\d+)\s*\+\s*years?/i);
-  if (minAgeMatch) {
-    const minAge = parseInt(minAgeMatch[1]);
-    return minAge <= AGE_MAX; // if min age ≤ 50, someone aged 40–50 qualifies
-  }
+  if (minAgeMatch) return parseInt(minAgeMatch[1]) <= AGE_MAX;
 
-  // No age restriction found — assume open to all
   return true;
 }
 
 // ─── Core Polling Logic ───────────────────────────────────────────────────────
 
-async function checkAvailability() {
+async function checkAvailability(triggeredBy = 'schedule') {
   log('Starting availability check…');
+
+  const run = history.startRun();
+  run.triggeredBy = triggeredBy;
+
   const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({
+  const context  = await browser.newContext({
     userAgent:
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
       '(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -136,27 +128,35 @@ async function checkAvailability() {
   try {
     await page.goto(`${BASE_URL}/home?onlineSiteId=0&from_original_cui=true`, {
       waitUntil: 'networkidle',
-      timeout: 30000,
+      timeout:   30000,
     });
     log('Loaded home page');
 
     await login(page);
 
     const spots = await findDropInSpots(page);
+    run.spotsFound = spots;
 
     if (spots.length > 0) {
       log(`✅ Found ${spots.length} available spot(s) for ages ${AGE_MIN}–${AGE_MAX}!`);
       spots.forEach(s => log(`   ${s.name} — ${s.date} ${s.time} @ ${s.location}`));
       await sendAlert(spots);
+      run.emailSent = true;
+      run.status    = 'success';
     } else {
       log(`No available pickleball drop-in spots found for ages ${AGE_MIN}–${AGE_MAX}.`);
+      run.status = 'no_spots';
     }
 
+    history.finishRun(run);
     return spots;
   } catch (err) {
     log(`❌ Error during check: ${err.message}`);
     await page.screenshot({ path: `error-${Date.now()}.png` });
     log('Screenshot saved for debugging.');
+    run.status = 'error';
+    run.error  = err.message;
+    history.finishRun(run);
     throw err;
   } finally {
     await browser.close();
@@ -194,7 +194,7 @@ async function findDropInSpots(page) {
   log('Navigated to pickleball drop-in search');
   await page.waitForTimeout(3000);
 
-  const spots = [];
+  const spots        = [];
   const activityItems = await page
     .locator('[class*="activity"], [class*="program"], [class*="session"], .result-item, .activity-item')
     .all();
@@ -207,7 +207,6 @@ async function findDropInSpots(page) {
   for (const item of activityItems) {
     const text = await item.innerText().catch(() => '');
     if (!text.toLowerCase().includes('pickleball')) continue;
-
     if (/full|sold out|no spots|waitlist only/i.test(text)) continue;
     if (/closed|cancelled|not available/i.test(text)) continue;
     if (!isAgeEligible(text)) {
@@ -228,7 +227,7 @@ async function findDropInSpots(page) {
 
 function parseBodyTextForSpots(bodyText) {
   const spots = [];
-  const lines = bodyText.split('\n').map(l => l.trim()).filter(Boolean);
+  const lines  = bodyText.split('\n').map(l => l.trim()).filter(Boolean);
   let inPickleball = false;
 
   for (let i = 0; i < lines.length; i++) {
@@ -241,7 +240,7 @@ function parseBodyTextForSpots(bodyText) {
     }
 
     const hasAvailability = /\d+\s*(spot|space|opening|available|open)/i.test(line);
-    const isFull = /full|sold out|waitlist|no spots/i.test(line);
+    const isFull          = /full|sold out|waitlist|no spots/i.test(line);
     if (!hasAvailability || isFull) continue;
 
     const context = lines.slice(Math.max(0, i - 2), i + 3).join(' ');
@@ -258,7 +257,7 @@ function extractSpotInfo(text) {
   const dateMatch =
     text.match(/(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z,\s]*(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}(?:,?\s*\d{4})?/i) ||
     text.match(/\d{4}-\d{2}-\d{2}/);
-  const timeMatch    = text.match(/\d{1,2}:\d{2}\s*(?:AM|PM|am|pm)?/);
+  const timeMatch     = text.match(/\d{1,2}:\d{2}\s*(?:AM|PM|am|pm)?/);
   const locationMatch =
     text.match(/(?:at|@|location[:\s]+)([A-Z][^\n,]+)/i) ||
     text.match(/(Community Centre|Arena|Park|Gym|Recreation|Centre|Center)/i);
@@ -289,8 +288,8 @@ function validateConfig() {
 function startPollingLoop() {
   log(`🏓 Pickleball Poller started — checking every ${process.env.POLL_INTERVAL_MINUTES || 30} min`);
   log(`   Age filter: ${AGE_MIN}–${AGE_MAX} years`);
-  checkAvailability();
-  return setInterval(checkAvailability, POLL_INTERVAL_MS);
+  checkAvailability('schedule');
+  return setInterval(() => checkAvailability('schedule'), POLL_INTERVAL_MS);
 }
 
 module.exports = { checkAvailability, onLog, startPollingLoop, validateConfig };

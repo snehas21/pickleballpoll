@@ -7,227 +7,368 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --green:      #276749;
+      --green-dark: #22543d;
+      --green-bg:   #f0fff4;
+      --green-mid:  #9ae6b4;
+      --blue-bg:    #ebf8ff;
+      --blue:       #2b6cb0;
+      --blue-mid:   #bee3f8;
+      --red-bg:     #fff5f5;
+      --red:        #c53030;
+      --red-mid:    #fed7d7;
+      --gray:       #718096;
+      --gray-light: #f7fafc;
+      --border:     #e2e8f0;
+      --text:       #1a202c;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f0f4f8;
-      color: #1a202c;
+      background: #edf2f7;
+      color: var(--text);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem 3rem;
     }
 
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      padding: 2rem 2.5rem;
-      width: 100%;
-      max-width: 680px;
-    }
-
-    header {
+    /* ── Header ── */
+    .header {
+      max-width: 960px;
+      margin: 0 auto 1.5rem;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.4rem;
-    }
-
-    header .emoji { font-size: 2.2rem; }
-
-    h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #22543d;
-    }
-
-    .subtitle {
-      color: #718096;
-      font-size: 0.9rem;
-      margin-bottom: 1.8rem;
-    }
-
-    .badges {
-      display: flex;
-      gap: 0.5rem;
+      justify-content: space-between;
       flex-wrap: wrap;
-      margin-bottom: 1.8rem;
+      gap: 0.75rem;
     }
 
+    .header-title { display: flex; align-items: center; gap: 0.6rem; }
+    .header-title .emoji { font-size: 1.8rem; }
+    .header-title h1 { font-size: 1.4rem; font-weight: 700; color: var(--green-dark); }
+    .header-title p  { font-size: 0.8rem; color: var(--gray); margin-top: 1px; }
+
+    .badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .badge {
-      background: #ebf8ff;
-      color: #2b6cb0;
-      border: 1px solid #bee3f8;
       border-radius: 999px;
-      padding: 0.25rem 0.85rem;
-      font-size: 0.78rem;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
     }
+    .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
+    .badge-blue  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-mid);  }
 
-    .badge.green {
-      background: #f0fff4;
-      color: #276749;
-      border-color: #9ae6b4;
+    /* ── Stats row ── */
+    .stats {
+      max-width: 960px;
+      margin: 0 auto 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
     }
 
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+    }
+    .stat-card .label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 0.35rem; }
+    .stat-card .value { font-size: 1.5rem; font-weight: 700; color: var(--text); line-height: 1; }
+    .stat-card .sub   { font-size: 0.72rem; color: var(--gray); margin-top: 0.25rem; }
+
+    /* ── Main grid ── */
+    .main {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 680px) { .main { grid-template-columns: 1fr; } }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 0.9rem 1.25rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-header h2 { font-size: 0.9rem; font-weight: 600; }
+    .card-body { padding: 1.25rem; }
+
+    /* ── Poll button ── */
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      background: #276749;
+      gap: 0.45rem;
+      background: var(--green);
       color: #fff;
       border: none;
-      border-radius: 10px;
-      padding: 0.75rem 1.6rem;
-      font-size: 1rem;
+      border-radius: 9px;
+      padding: 0.65rem 1.4rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
+      width: 100%;
+      justify-content: center;
       transition: background 0.15s, transform 0.1s;
-      margin-bottom: 1.8rem;
+      margin-bottom: 1rem;
     }
-
-    .btn:hover:not(:disabled) { background: #22543d; transform: translateY(-1px); }
+    .btn:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-1px); }
     .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:disabled { background: #a0aec0; cursor: not-allowed; }
 
-    .btn:disabled {
-      background: #a0aec0;
-      cursor: not-allowed;
-    }
-
-    .btn .spinner {
+    .spinner {
       display: none;
-      width: 16px;
-      height: 16px;
+      width: 14px; height: 14px;
       border: 2px solid rgba(255,255,255,0.4);
       border-top-color: #fff;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
     }
-
     .btn.loading .spinner { display: block; }
     .btn.loading .btn-text { opacity: 0.7; }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .status-bar {
+    /* ── Status line ── */
+    .status-line {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.85rem;
-      color: #718096;
-      margin-bottom: 0.75rem;
+      gap: 0.45rem;
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 1rem;
     }
-
     .dot {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border-radius: 50%;
-      background: #68d391;
       flex-shrink: 0;
     }
-
     .dot.idle   { background: #68d391; }
     .dot.active { background: #f6ad55; animation: pulse 1s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
-    }
-
+    /* ── Log box ── */
     .log-box {
       background: #1a202c;
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-      height: 340px;
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      height: 260px;
       overflow-y: auto;
-      font-family: 'Menlo', 'Consolas', 'Courier New', monospace;
-      font-size: 0.78rem;
-      line-height: 1.6;
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 0.72rem;
+      line-height: 1.65;
     }
-
-    .log-box p {
-      color: #a0aec0;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-
+    .log-box p { color: #a0aec0; white-space: pre-wrap; word-break: break-all; }
     .log-box p.success { color: #68d391; }
     .log-box p.error   { color: #fc8181; }
-    .log-box p.warn    { color: #f6ad55; }
     .log-box p.info    { color: #63b3ed; }
+    .log-box p.warn    { color: #f6ad55; }
+    .log-box .placeholder { color: #4a5568; font-style: italic; }
 
-    .log-box .placeholder {
-      color: #4a5568;
-      font-style: italic;
+    /* ── History table ── */
+    .history-wrap {
+      max-height: 340px;
+      overflow-y: auto;
     }
 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+    thead th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--gray);
+      border-bottom: 2px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: #fff;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-light); }
+    tbody td { padding: 0.55rem 0.75rem; vertical-align: middle; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      border-radius: 999px;
+      padding: 0.18rem 0.6rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .pill-success { background: var(--green-bg); color: var(--green);   border: 1px solid var(--green-mid); }
+    .pill-no-spots{ background: var(--blue-bg);  color: var(--blue);    border: 1px solid var(--blue-mid);  }
+    .pill-error   { background: var(--red-bg);   color: var(--red);     border: 1px solid var(--red-mid);   }
+    .pill-running { background: #fffbeb;          color: #b7791f;        border: 1px solid #fbd38d;          }
+
+    .email-yes { color: var(--green); font-weight: 600; }
+    .email-no  { color: #cbd5e0; }
+
+    .trigger-badge {
+      font-size: 0.65rem;
+      color: var(--gray);
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray);
+      font-size: 0.82rem;
+    }
+
+    .spots-list { margin: 0; padding: 0; list-style: none; }
+    .spots-list li { font-size: 0.7rem; color: var(--gray); }
+    .spots-list li::before { content: '• '; color: var(--green); }
+
+    /* ── Refresh btn ── */
+    .icon-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.25rem 0.55rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      color: var(--gray);
+      transition: background 0.1s;
+    }
+    .icon-btn:hover { background: var(--gray-light); }
+
+    /* ── Toast ── */
     .toast {
       position: fixed;
-      bottom: 1.5rem;
-      left: 50%;
+      bottom: 1.5rem; left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: #276749;
+      background: var(--green-dark);
       color: #fff;
-      padding: 0.65rem 1.4rem;
+      padding: 0.6rem 1.3rem;
       border-radius: 999px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 500;
       transition: transform 0.3s ease;
       z-index: 999;
       pointer-events: none;
     }
-
     .toast.show { transform: translateX(-50%) translateY(0); }
-
-    .footer {
-      margin-top: 1.5rem;
-      font-size: 0.75rem;
-      color: #a0aec0;
-      text-align: center;
-    }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <header>
+<!-- Header -->
+<div class="header">
+  <div class="header-title">
     <span class="emoji">🏓</span>
-    <h1>Pickleball Poller</h1>
-  </header>
-  <p class="subtitle">Richmond Hill — Active Communities</p>
-
+    <div>
+      <h1>Pickleball Poller</h1>
+      <p>Richmond Hill — Active Communities</p>
+    </div>
+  </div>
   <div class="badges">
-    <span class="badge green">Drop-in sessions</span>
-    <span class="badge">Ages 40–50</span>
-    <span class="badge">Auto-polls every 30 min</span>
-  </div>
-
-  <button class="btn" id="pollBtn" onclick="triggerPoll()">
-    <div class="spinner"></div>
-    <span class="btn-text">Poll Now</span>
-  </button>
-
-  <div class="status-bar">
-    <span class="dot idle" id="dot"></span>
-    <span id="statusText">Idle — waiting for next scheduled check</span>
-  </div>
-
-  <div class="log-box" id="logBox">
-    <p class="placeholder">Logs will appear here…</p>
+    <span class="badge badge-green">Drop-in sessions</span>
+    <span class="badge badge-blue">Ages 40–50</span>
+    <span class="badge badge-blue">Every 30 min</span>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- Stats -->
+<div class="stats" id="statsRow">
+  <div class="stat-card">
+    <div class="label">Total runs</div>
+    <div class="value" id="statTotal">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Spots found</div>
+    <div class="value" id="statSpots">—</div>
+    <div class="sub">across all runs</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Emails sent</div>
+    <div class="value" id="statEmails">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Last checked</div>
+    <div class="value" id="statLast" style="font-size:0.95rem">—</div>
+    <div class="sub" id="statLastStatus"></div>
+  </div>
+</div>
 
-<p class="footer">Alerts sent to snehashis@gmail.com when spots open up.</p>
+<!-- Main grid -->
+<div class="main">
+
+  <!-- Left: Poll control + live log -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Live Poll</h2>
+      <div class="status-line" style="margin:0">
+        <span class="dot idle" id="dot"></span>
+        <span id="statusText">Idle</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <button class="btn" id="pollBtn" onclick="triggerPoll()">
+        <div class="spinner"></div>
+        <span class="btn-text">Poll Now</span>
+      </button>
+      <div class="log-box" id="logBox">
+        <p class="placeholder">Live log output will appear here…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Run history -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Run History</h2>
+      <button class="icon-btn" onclick="loadHistory()" title="Refresh">&#8635; Refresh</button>
+    </div>
+    <div class="history-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Started</th>
+            <th>Status</th>
+            <th>Spots</th>
+            <th>Email</th>
+            <th>By</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <tr><td colspan="5" class="empty-state">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
   const logBox    = document.getElementById('logBox');
   const btn       = document.getElementById('pollBtn');
   const dot       = document.getElementById('dot');
   const statusTxt = document.getElementById('statusText');
-  let   firstLog  = true;
+  let firstLog    = true;
 
   // ── Live log stream ──────────────────────────────────────────────────────────
   const evtSource = new EventSource('/log-stream');
@@ -235,29 +376,24 @@
   evtSource.onmessage = e => {
     const line = JSON.parse(e.data);
 
-    if (firstLog) {
-      logBox.innerHTML = '';
-      firstLog = false;
-    }
+    if (firstLog) { logBox.innerHTML = ''; firstLog = false; }
 
     const p = document.createElement('p');
     p.textContent = line;
-
-    if (/✅|found \d+ available/i.test(line))      p.className = 'success';
-    else if (/❌|error/i.test(line))               p.className = 'error';
-    else if (/⚠|warn|skipped/i.test(line))        p.className = 'warn';
+    if (/✅|found \d+ available/i.test(line))          p.className = 'success';
+    else if (/❌|error/i.test(line))                   p.className = 'error';
+    else if (/⚠|warn|skipped/i.test(line))            p.className = 'warn';
     else if (/starting|navigated|loaded|logged/i.test(line)) p.className = 'info';
 
     logBox.appendChild(p);
     logBox.scrollTop = logBox.scrollHeight;
 
-    // Update status dot based on log content
-    if (/starting availability/i.test(line)) setStatus('active', 'Polling in progress…');
-    if (/no available|email alert|error/i.test(line)) setStatus('idle', `Last checked: ${new Date().toLocaleTimeString()}`);
-    if (/✅/.test(line)) setStatus('idle', `Spot found! ${new Date().toLocaleTimeString()}`);
+    if (/starting availability/i.test(line))   setStatus('active', 'Polling in progress…');
+    if (/no available|email alert|❌/i.test(line)) { setStatus('idle', `Last checked: ${new Date().toLocaleTimeString()}`); loadHistory(); }
+    if (/✅/.test(line))                        { setStatus('idle', `Spot found! ${new Date().toLocaleTimeString()}`);       loadHistory(); }
   };
 
-  // ── Trigger manual poll ──────────────────────────────────────────────────────
+  // ── Manual poll ──────────────────────────────────────────────────────────────
   async function triggerPoll() {
     btn.disabled = true;
     btn.classList.add('loading');
@@ -273,11 +409,7 @@
         setStatus('idle', 'Poll request rejected');
       } else {
         showToast('Poll started!');
-        // Re-enable after a few seconds (the poll runs async server-side)
-        setTimeout(() => {
-          btn.disabled = false;
-          btn.classList.remove('loading');
-        }, 5000);
+        setTimeout(() => { btn.disabled = false; btn.classList.remove('loading'); }, 5000);
       }
     } catch {
       showToast('Could not reach server');
@@ -287,6 +419,76 @@
     }
   }
 
+  // ── History ──────────────────────────────────────────────────────────────────
+  async function loadHistory() {
+    const res   = await fetch('/api/history').catch(() => null);
+    if (!res || !res.ok) return;
+    const runs  = await res.json();
+
+    updateStats(runs);
+
+    const tbody = document.getElementById('historyBody');
+    if (runs.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No runs yet — click Poll Now to start.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = runs.map(run => {
+      const started  = run.startedAt ? fmtDate(run.startedAt) : '—';
+      const duration = run.startedAt && run.finishedAt
+        ? `${Math.round((new Date(run.finishedAt) - new Date(run.startedAt)) / 1000)}s`
+        : '';
+
+      const statusPill = {
+        success:  `<span class="pill pill-success">✅ Spots found</span>`,
+        no_spots: `<span class="pill pill-no-spots">No spots</span>`,
+        error:    `<span class="pill pill-error" title="${escHtml(run.error || '')}">❌ Error</span>`,
+        running:  `<span class="pill pill-running">Running…</span>`,
+      }[run.status] || `<span class="pill">${run.status}</span>`;
+
+      const spotsCell = run.spotsFound && run.spotsFound.length > 0
+        ? `<ul class="spots-list">${run.spotsFound.map(s => `<li>${escHtml(s.name)}</li>`).join('')}</ul>`
+        : `<span style="color:#cbd5e0">—</span>`;
+
+      const emailCell = run.emailSent
+        ? `<span class="email-yes">✓ Sent</span>`
+        : `<span class="email-no">—</span>`;
+
+      const triggerBadge = `<span class="trigger-badge">${run.triggeredBy || 'schedule'}</span>`;
+
+      return `<tr>
+        <td>
+          <div style="font-weight:500">${started}</div>
+          <div style="font-size:0.67rem;color:var(--gray)">${duration}</div>
+        </td>
+        <td>${statusPill}</td>
+        <td>${spotsCell}</td>
+        <td>${emailCell}</td>
+        <td>${triggerBadge}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function updateStats(runs) {
+    const finished   = runs.filter(r => r.status !== 'running');
+    const totalSpots = runs.reduce((sum, r) => sum + (r.spotsFound ? r.spotsFound.length : 0), 0);
+    const totalEmail = runs.filter(r => r.emailSent).length;
+    const last       = finished[0];
+
+    document.getElementById('statTotal').textContent  = runs.length;
+    document.getElementById('statSpots').textContent  = totalSpots;
+    document.getElementById('statEmails').textContent = totalEmail;
+
+    if (last) {
+      document.getElementById('statLast').textContent       = fmtDate(last.finishedAt || last.startedAt);
+      document.getElementById('statLastStatus').textContent =
+        last.status === 'success'  ? '🟢 Spots found' :
+        last.status === 'no_spots' ? '🔵 None available' :
+        last.status === 'error'    ? '🔴 Error' : '';
+    }
+  }
+
+  // ── Helpers ──────────────────────────────────────────────────────────────────
   function setStatus(state, text) {
     dot.className = `dot ${state}`;
     statusTxt.textContent = text;
@@ -299,12 +501,19 @@
     setTimeout(() => t.classList.remove('show'), 2800);
   }
 
-  // Keyboard shortcut: Enter or Space on the button
-  document.addEventListener('keydown', e => {
-    if ((e.key === 'Enter' || e.key === ' ') && document.activeElement !== btn) {
-      btn.focus();
-    }
-  });
+  function fmtDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
+      + ' ' + d.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Load history on startup, then refresh every 60s
+  loadHistory();
+  setInterval(loadHistory, 60000);
 </script>
 </body>
 </html>
