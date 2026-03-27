@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "poll": "node poller.js",
+    "poll-once": "node poll-once.js",
     "install-browser": "npx playwright install chromium"
   },
   "dependencies": {
