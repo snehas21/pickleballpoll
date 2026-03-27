@@ -18,6 +18,9 @@
       --red-bg:     #fff5f5;
       --red:        #c53030;
       --red-mid:    #fed7d7;
+      --orange-bg:  #fffbeb;
+      --orange:     #b7791f;
+      --orange-mid: #fbd38d;
       --gray:       #718096;
       --gray-light: #f7fafc;
       --border:     #e2e8f0;
@@ -42,232 +45,163 @@
       flex-wrap: wrap;
       gap: 0.75rem;
     }
-
     .header-title { display: flex; align-items: center; gap: 0.6rem; }
     .header-title .emoji { font-size: 1.8rem; }
-    .header-title h1 { font-size: 1.4rem; font-weight: 700; color: var(--green-dark); }
-    .header-title p  { font-size: 0.8rem; color: var(--gray); margin-top: 1px; }
-
+    .header-title h1  { font-size: 1.4rem; font-weight: 700; color: var(--green-dark); }
+    .header-title p   { font-size: 0.8rem; color: var(--gray); margin-top: 1px; }
     .badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .badge {
-      border-radius: 999px;
-      padding: 0.2rem 0.75rem;
-      font-size: 0.72rem;
-      font-weight: 600;
+      border-radius: 999px; padding: 0.2rem 0.75rem;
+      font-size: 0.72rem; font-weight: 600;
     }
     .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
     .badge-blue  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-mid);  }
 
-    /* ── Stats row ── */
+    /* ── Stats ── */
     .stats {
-      max-width: 960px;
-      margin: 0 auto 1.25rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 0.75rem;
+      max-width: 960px; margin: 0 auto 1.25rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem;
     }
-
-    .stat-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      border: 1px solid var(--border);
-    }
-    .stat-card .label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 0.35rem; }
-    .stat-card .value { font-size: 1.5rem; font-weight: 700; color: var(--text); line-height: 1; }
-    .stat-card .sub   { font-size: 0.72rem; color: var(--gray); margin-top: 0.25rem; }
+    .stat-card { background: #fff; border-radius: 12px; padding: 1rem 1.25rem; border: 1px solid var(--border); }
+    .stat-card .label { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 0.3rem; }
+    .stat-card .value { font-size: 1.45rem; font-weight: 700; color: var(--text); line-height: 1; }
+    .stat-card .sub   { font-size: 0.7rem; color: var(--gray); margin-top: 0.25rem; }
 
     /* ── Main grid ── */
     .main {
-      max-width: 960px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      max-width: 960px; margin: 0 auto;
+      display: grid; grid-template-columns: 300px 1fr; gap: 1rem;
     }
-    @media (max-width: 680px) { .main { grid-template-columns: 1fr; } }
+    @media (max-width: 700px) { .main { grid-template-columns: 1fr; } }
 
     /* ── Cards ── */
-    .card {
-      background: #fff;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-    }
-
+    .card { background: #fff; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
     .card-header {
-      padding: 0.9rem 1.25rem 0.75rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
     }
     .card-header h2 { font-size: 0.9rem; font-weight: 600; }
     .card-body { padding: 1.25rem; }
 
-    /* ── Poll button ── */
+    /* ── Buttons ── */
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
+
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      background: var(--green);
-      color: #fff;
-      border: none;
-      border-radius: 9px;
-      padding: 0.65rem 1.4rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      justify-content: center;
-      transition: background 0.15s, transform 0.1s;
-      margin-bottom: 1rem;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      border: none; border-radius: 9px; padding: 0.65rem 1rem;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      transition: filter 0.15s, transform 0.1s;
     }
-    .btn:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-1px); }
+    .btn:hover:not(:disabled) { filter: brightness(0.92); transform: translateY(-1px); }
     .btn:active:not(:disabled) { transform: translateY(0); }
-    .btn:disabled { background: #a0aec0; cursor: not-allowed; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-poll    { background: var(--green); color: #fff; grid-column: span 2; }
+    .btn-stop    { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-mid); }
+    .btn-start   { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-mid); }
 
     .spinner {
-      display: none;
-      width: 14px; height: 14px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      display: none; width: 13px; height: 13px;
+      border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
     }
-    .btn.loading .spinner { display: block; }
-    .btn.loading .btn-text { opacity: 0.7; }
+    .btn-poll.loading .spinner { display: block; }
+    .btn-poll.loading .btn-text { opacity: 0.75; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Status line ── */
-    .status-line {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-size: 0.8rem;
-      color: var(--gray);
+    /* ── Interval control ── */
+    .interval-row {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--gray-light); border: 1px solid var(--border);
+      border-radius: 9px; padding: 0.65rem 0.85rem;
       margin-bottom: 1rem;
     }
-    .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
+    .interval-row label { font-size: 0.78rem; color: var(--gray); white-space: nowrap; flex: 1; }
+    .interval-row input[type="number"] {
+      width: 64px; border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.3rem 0.5rem; font-size: 0.85rem; text-align: center;
     }
-    .dot.idle   { background: #68d391; }
-    .dot.active { background: #f6ad55; animation: pulse 1s ease-in-out infinite; }
+    .interval-row input:focus { outline: none; border-color: var(--green); }
+    .btn-apply {
+      background: var(--green); color: #fff; border: none; border-radius: 6px;
+      padding: 0.3rem 0.65rem; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-apply:hover { background: var(--green-dark); }
+
+    /* ── Poll status bar ── */
+    .status-bar {
+      display: flex; align-items: center; gap: 0.45rem;
+      font-size: 0.78rem; color: var(--gray); margin-bottom: 1rem;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot.idle    { background: #68d391; }
+    .dot.active  { background: #f6ad55; animation: pulse 1s ease-in-out infinite; }
+    .dot.stopped { background: #fc8181; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     /* ── Log box ── */
     .log-box {
-      background: #1a202c;
-      border-radius: 8px;
-      padding: 0.85rem 1rem;
-      height: 260px;
-      overflow-y: auto;
-      font-family: 'Menlo', 'Consolas', monospace;
-      font-size: 0.72rem;
-      line-height: 1.65;
+      background: #1a202c; border-radius: 8px;
+      padding: 0.85rem 1rem; height: 240px; overflow-y: auto;
+      font-family: 'Menlo','Consolas',monospace; font-size: 0.72rem; line-height: 1.65;
     }
-    .log-box p { color: #a0aec0; white-space: pre-wrap; word-break: break-all; }
-    .log-box p.success { color: #68d391; }
-    .log-box p.error   { color: #fc8181; }
-    .log-box p.info    { color: #63b3ed; }
-    .log-box p.warn    { color: #f6ad55; }
+    .log-box p          { color: #a0aec0; white-space: pre-wrap; word-break: break-all; }
+    .log-box p.success  { color: #68d391; }
+    .log-box p.error    { color: #fc8181; }
+    .log-box p.info     { color: #63b3ed; }
+    .log-box p.warn     { color: #f6ad55; }
     .log-box .placeholder { color: #4a5568; font-style: italic; }
 
     /* ── History table ── */
-    .history-wrap {
-      max-height: 340px;
-      overflow-y: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.78rem;
-    }
+    .history-scroll { max-height: 400px; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
     thead th {
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      color: var(--gray);
-      border-bottom: 2px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: #fff;
+      text-align: left; padding: 0.5rem 0.85rem;
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: .05em; color: var(--gray);
+      border-bottom: 2px solid var(--border); position: sticky; top: 0; background: #fff;
     }
     tbody tr { border-bottom: 1px solid var(--border); }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: var(--gray-light); }
-    tbody td { padding: 0.55rem 0.75rem; vertical-align: middle; }
+    tbody td { padding: 0.6rem 0.85rem; vertical-align: middle; }
 
     .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      border-radius: 999px;
-      padding: 0.18rem 0.6rem;
-      font-size: 0.68rem;
-      font-weight: 600;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      border-radius: 999px; padding: 0.2rem 0.65rem;
+      font-size: 0.68rem; font-weight: 600; white-space: nowrap;
     }
-    .pill-success { background: var(--green-bg); color: var(--green);   border: 1px solid var(--green-mid); }
-    .pill-no-spots{ background: var(--blue-bg);  color: var(--blue);    border: 1px solid var(--blue-mid);  }
-    .pill-error   { background: var(--red-bg);   color: var(--red);     border: 1px solid var(--red-mid);   }
-    .pill-running { background: #fffbeb;          color: #b7791f;        border: 1px solid #fbd38d;          }
+    .pill-success  { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
+    .pill-no-spots { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-mid);  }
+    .pill-error    { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-mid);   }
+    .pill-running  { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-mid); }
 
     .email-yes { color: var(--green); font-weight: 600; }
     .email-no  { color: #cbd5e0; }
-
     .trigger-badge {
-      font-size: 0.65rem;
-      color: var(--gray);
-      background: var(--gray-light);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.1rem 0.35rem;
+      font-size: 0.65rem; color: var(--gray);
+      background: var(--gray-light); border: 1px solid var(--border);
+      border-radius: 4px; padding: 0.1rem 0.4rem;
     }
-
-    .empty-state {
-      text-align: center;
-      padding: 2rem;
-      color: var(--gray);
-      font-size: 0.82rem;
-    }
-
     .spots-list { margin: 0; padding: 0; list-style: none; }
     .spots-list li { font-size: 0.7rem; color: var(--gray); }
     .spots-list li::before { content: '• '; color: var(--green); }
+    .empty-state { text-align: center; padding: 2.5rem; color: var(--gray); font-size: 0.82rem; }
 
-    /* ── Refresh btn ── */
     .icon-btn {
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      padding: 0.25rem 0.55rem;
-      cursor: pointer;
-      font-size: 0.75rem;
-      color: var(--gray);
-      transition: background 0.1s;
+      background: none; border: 1px solid var(--border); border-radius: 7px;
+      padding: 0.25rem 0.55rem; cursor: pointer; font-size: 0.75rem; color: var(--gray);
     }
     .icon-btn:hover { background: var(--gray-light); }
 
     /* ── Toast ── */
     .toast {
-      position: fixed;
-      bottom: 1.5rem; left: 50%;
+      position: fixed; bottom: 1.5rem; left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: var(--green-dark);
-      color: #fff;
-      padding: 0.6rem 1.3rem;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      transition: transform 0.3s ease;
-      z-index: 999;
-      pointer-events: none;
+      background: var(--green-dark); color: #fff;
+      padding: 0.6rem 1.3rem; border-radius: 999px;
+      font-size: 0.85rem; font-weight: 500;
+      transition: transform 0.3s ease; z-index: 999; pointer-events: none;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
@@ -286,12 +220,12 @@
   <div class="badges">
     <span class="badge badge-green">Drop-in sessions</span>
     <span class="badge badge-blue">Ages 40–50</span>
-    <span class="badge badge-blue">Every 30 min</span>
+    <span class="badge badge-blue" id="intervalBadge">Every 30 min</span>
   </div>
 </div>
 
 <!-- Stats -->
-<div class="stats" id="statsRow">
+<div class="stats">
   <div class="stat-card">
     <div class="label">Total runs</div>
     <div class="value" id="statTotal">—</div>
@@ -310,42 +244,69 @@
     <div class="value" id="statLast" style="font-size:0.95rem">—</div>
     <div class="sub" id="statLastStatus"></div>
   </div>
+  <div class="stat-card">
+    <div class="label">Scheduler</div>
+    <div class="value" id="statScheduler" style="font-size:1rem">—</div>
+    <div class="sub" id="statInterval"></div>
+  </div>
 </div>
 
 <!-- Main grid -->
 <div class="main">
 
-  <!-- Left: Poll control + live log -->
+  <!-- Left: controls + log -->
   <div class="card">
     <div class="card-header">
-      <h2>Live Poll</h2>
-      <div class="status-line" style="margin:0">
+      <h2>Controls</h2>
+      <div class="status-bar" style="margin:0">
         <span class="dot idle" id="dot"></span>
-        <span id="statusText">Idle</span>
+        <span id="statusText">Loading…</span>
       </div>
     </div>
     <div class="card-body">
-      <button class="btn" id="pollBtn" onclick="triggerPoll()">
-        <div class="spinner"></div>
-        <span class="btn-text">Poll Now</span>
-      </button>
+
+      <!-- Poll Now (full width) -->
+      <div class="btn-row">
+        <button class="btn btn-poll" id="pollBtn" onclick="triggerPoll()">
+          <div class="spinner"></div>
+          <span class="btn-text">&#9654; Poll Now</span>
+        </button>
+        <button class="btn btn-stop"  id="stopBtn"  onclick="stopPoll()">&#9646;&#9646; Stop</button>
+        <button class="btn btn-start" id="startBtn" onclick="startPoll()">&#9654; Resume</button>
+      </div>
+
+      <!-- Interval -->
+      <div class="interval-row">
+        <label for="intervalInput">Check every</label>
+        <input type="number" id="intervalInput" min="1" max="1440" value="30" />
+        <span style="font-size:0.78rem;color:var(--gray)">min</span>
+        <button class="btn-apply" onclick="applyInterval()">Apply</button>
+      </div>
+
+      <!-- Log -->
+      <div class="status-bar">
+        <span class="dot idle" id="dot2"></span>
+        <span id="statusText2">Idle</span>
+      </div>
       <div class="log-box" id="logBox">
         <p class="placeholder">Live log output will appear here…</p>
       </div>
+
     </div>
   </div>
 
-  <!-- Right: Run history -->
+  <!-- Right: history -->
   <div class="card">
     <div class="card-header">
       <h2>Run History</h2>
-      <button class="icon-btn" onclick="loadHistory()" title="Refresh">&#8635; Refresh</button>
+      <button class="icon-btn" onclick="loadHistory()">&#8635; Refresh</button>
     </div>
-    <div class="history-wrap">
+    <div class="history-scroll">
       <table>
         <thead>
           <tr>
             <th>Started</th>
+            <th>Duration</th>
             <th>Status</th>
             <th>Spots</th>
             <th>Email</th>
@@ -353,7 +314,7 @@
           </tr>
         </thead>
         <tbody id="historyBody">
-          <tr><td colspan="5" class="empty-state">Loading…</td></tr>
+          <tr><td colspan="6" class="empty-state">Loading…</td></tr>
         </tbody>
       </table>
     </div>
@@ -364,134 +325,182 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const logBox    = document.getElementById('logBox');
-  const btn       = document.getElementById('pollBtn');
-  const dot       = document.getElementById('dot');
-  const statusTxt = document.getElementById('statusText');
-  let firstLog    = true;
+  let firstLog = true;
+  const logBox = document.getElementById('logBox');
 
   // ── Live log stream ──────────────────────────────────────────────────────────
   const evtSource = new EventSource('/log-stream');
-
   evtSource.onmessage = e => {
     const line = JSON.parse(e.data);
-
     if (firstLog) { logBox.innerHTML = ''; firstLog = false; }
 
     const p = document.createElement('p');
     p.textContent = line;
-    if (/✅|found \d+ available/i.test(line))          p.className = 'success';
-    else if (/❌|error/i.test(line))                   p.className = 'error';
-    else if (/⚠|warn|skipped/i.test(line))            p.className = 'warn';
+    if      (/✅|found \d+ available/i.test(line))         p.className = 'success';
+    else if (/❌|error/i.test(line))                       p.className = 'error';
+    else if (/⚠|warn|skipped/i.test(line))                p.className = 'warn';
     else if (/starting|navigated|loaded|logged/i.test(line)) p.className = 'info';
 
     logBox.appendChild(p);
     logBox.scrollTop = logBox.scrollHeight;
 
-    if (/starting availability/i.test(line))   setStatus('active', 'Polling in progress…');
-    if (/no available|email alert|❌/i.test(line)) { setStatus('idle', `Last checked: ${new Date().toLocaleTimeString()}`); loadHistory(); }
-    if (/✅/.test(line))                        { setStatus('idle', `Spot found! ${new Date().toLocaleTimeString()}`);       loadHistory(); }
+    if (/starting availability/i.test(line))   setRunStatus('active', 'Polling in progress…');
+    if (/no available|email alert|❌/i.test(line)) { setRunStatus('idle', `Last: ${new Date().toLocaleTimeString()}`); loadHistory(); }
+    if (/✅/.test(line))                        { setRunStatus('idle', `Spot found! ${new Date().toLocaleTimeString()}`); loadHistory(); }
   };
 
-  // ── Manual poll ──────────────────────────────────────────────────────────────
+  // ── Poll Now ─────────────────────────────────────────────────────────────────
   async function triggerPoll() {
+    const btn = document.getElementById('pollBtn');
     btn.disabled = true;
     btn.classList.add('loading');
-    setStatus('active', 'Manual poll triggered…');
-
-    try {
-      const res  = await fetch('/poll', { method: 'POST' });
-      const data = await res.json();
-      if (!res.ok) {
-        showToast(data.error || 'Failed to start poll');
-        btn.disabled = false;
-        btn.classList.remove('loading');
-        setStatus('idle', 'Poll request rejected');
-      } else {
-        showToast('Poll started!');
-        setTimeout(() => { btn.disabled = false; btn.classList.remove('loading'); }, 5000);
-      }
-    } catch {
-      showToast('Could not reach server');
-      btn.disabled = false;
-      btn.classList.remove('loading');
-      setStatus('idle', 'Connection error');
+    const res  = await fetch('/poll', { method: 'POST' }).catch(() => null);
+    const data = res && await res.json().catch(() => ({}));
+    if (!res || !res.ok) {
+      showToast(data?.error || 'Could not start poll');
+      btn.disabled = false; btn.classList.remove('loading');
+    } else {
+      showToast('Poll started!');
+      setTimeout(() => { btn.disabled = false; btn.classList.remove('loading'); }, 5000);
     }
   }
 
-  // ── History ──────────────────────────────────────────────────────────────────
+  // ── Stop / Start ─────────────────────────────────────────────────────────────
+  async function stopPoll() {
+    const res  = await fetch('/poll/stop', { method: 'POST' });
+    const data = await res.json();
+    showToast('Scheduler stopped');
+    applyServerState(data);
+  }
+
+  async function startPoll() {
+    const res  = await fetch('/poll/start', { method: 'POST' });
+    const data = await res.json();
+    showToast('Scheduler resumed');
+    applyServerState(data);
+  }
+
+  // ── Change interval ───────────────────────────────────────────────────────────
+  async function applyInterval() {
+    const mins = parseInt(document.getElementById('intervalInput').value);
+    if (!mins || mins < 1) { showToast('Please enter a valid number of minutes'); return; }
+    const res  = await fetch('/poll/interval', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ minutes: mins }),
+    });
+    const data = await res.json();
+    showToast(`Interval set to ${mins} min`);
+    applyServerState(data);
+  }
+
+  // ── Sync UI with server state ─────────────────────────────────────────────────
+  function applyServerState({ isPolling, intervalMinutes, pollInProgress }) {
+    const dot      = document.getElementById('dot');
+    const statusTx = document.getElementById('statusText');
+    const stopBtn  = document.getElementById('stopBtn');
+    const startBtn = document.getElementById('startBtn');
+
+    if (pollInProgress) {
+      dot.className = 'dot active'; statusTx.textContent = 'Polling in progress…';
+    } else if (isPolling) {
+      dot.className = 'dot idle';   statusTx.textContent = `Polling every ${intervalMinutes} min`;
+    } else {
+      dot.className = 'dot stopped'; statusTx.textContent = 'Scheduler stopped';
+    }
+
+    stopBtn.disabled  = !isPolling;
+    startBtn.disabled = isPolling;
+
+    if (intervalMinutes) {
+      document.getElementById('intervalInput').value   = intervalMinutes;
+      document.getElementById('intervalBadge').textContent = `Every ${intervalMinutes} min`;
+      document.getElementById('statScheduler').textContent = isPolling ? '&#128994; Running' : '&#128308; Stopped';
+      document.getElementById('statInterval').textContent  = `${intervalMinutes} min interval`;
+    }
+  }
+
+  async function syncStatus() {
+    const res  = await fetch('/status').catch(() => null);
+    if (!res) return;
+    const data = await res.json();
+    applyServerState(data);
+  }
+
+  // ── History ───────────────────────────────────────────────────────────────────
   async function loadHistory() {
-    const res   = await fetch('/api/history').catch(() => null);
+    const res  = await fetch('/api/history').catch(() => null);
     if (!res || !res.ok) return;
-    const runs  = await res.json();
+    const runs = await res.json();
 
-    updateStats(runs);
-
-    const tbody = document.getElementById('historyBody');
-    if (runs.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No runs yet — click Poll Now to start.</td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = runs.map(run => {
-      const started  = run.startedAt ? fmtDate(run.startedAt) : '—';
-      const duration = run.startedAt && run.finishedAt
-        ? `${Math.round((new Date(run.finishedAt) - new Date(run.startedAt)) / 1000)}s`
-        : '';
-
-      const statusPill = {
-        success:  `<span class="pill pill-success">✅ Spots found</span>`,
-        no_spots: `<span class="pill pill-no-spots">No spots</span>`,
-        error:    `<span class="pill pill-error" title="${escHtml(run.error || '')}">❌ Error</span>`,
-        running:  `<span class="pill pill-running">Running…</span>`,
-      }[run.status] || `<span class="pill">${run.status}</span>`;
-
-      const spotsCell = run.spotsFound && run.spotsFound.length > 0
-        ? `<ul class="spots-list">${run.spotsFound.map(s => `<li>${escHtml(s.name)}</li>`).join('')}</ul>`
-        : `<span style="color:#cbd5e0">—</span>`;
-
-      const emailCell = run.emailSent
-        ? `<span class="email-yes">✓ Sent</span>`
-        : `<span class="email-no">—</span>`;
-
-      const triggerBadge = `<span class="trigger-badge">${run.triggeredBy || 'schedule'}</span>`;
-
-      return `<tr>
-        <td>
-          <div style="font-weight:500">${started}</div>
-          <div style="font-size:0.67rem;color:var(--gray)">${duration}</div>
-        </td>
-        <td>${statusPill}</td>
-        <td>${spotsCell}</td>
-        <td>${emailCell}</td>
-        <td>${triggerBadge}</td>
-      </tr>`;
-    }).join('');
-  }
-
-  function updateStats(runs) {
-    const finished   = runs.filter(r => r.status !== 'running');
-    const totalSpots = runs.reduce((sum, r) => sum + (r.spotsFound ? r.spotsFound.length : 0), 0);
-    const totalEmail = runs.filter(r => r.emailSent).length;
-    const last       = finished[0];
+    // Stats
+    const totalSpots  = runs.reduce((s, r) => s + (r.spotsFound?.length || 0), 0);
+    const totalEmails = runs.filter(r => r.emailSent).length;
+    const last        = runs.find(r => r.status !== 'running');
 
     document.getElementById('statTotal').textContent  = runs.length;
     document.getElementById('statSpots').textContent  = totalSpots;
-    document.getElementById('statEmails').textContent = totalEmail;
+    document.getElementById('statEmails').textContent = totalEmails;
 
     if (last) {
       document.getElementById('statLast').textContent       = fmtDate(last.finishedAt || last.startedAt);
       document.getElementById('statLastStatus').textContent =
-        last.status === 'success'  ? '🟢 Spots found' :
-        last.status === 'no_spots' ? '🔵 None available' :
-        last.status === 'error'    ? '🔴 Error' : '';
+        last.status === 'success'  ? '🟢 Spots found'     :
+        last.status === 'no_spots' ? '🔵 None available'  :
+        last.status === 'error'    ? '🔴 Error'            : '';
     }
+
+    // Table
+    const tbody = document.getElementById('historyBody');
+    if (!runs.length) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state">No runs yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = runs.map(run => {
+      const dur = (run.startedAt && run.finishedAt)
+        ? `${Math.round((new Date(run.finishedAt) - new Date(run.startedAt)) / 1000)}s`
+        : run.status === 'running' ? '…' : '—';
+
+      const pill = {
+        success:  `<span class="pill pill-success">&#10003; Spots found</span>`,
+        no_spots: `<span class="pill pill-no-spots">No spots</span>`,
+        error:    `<span class="pill pill-error" title="${esc(run.error||'')}">&#10007; Error</span>`,
+        running:  `<span class="pill pill-running">Running…</span>`,
+      }[run.status] || `<span class="pill">${esc(run.status)}</span>`;
+
+      const spots = run.spotsFound?.length
+        ? `<ul class="spots-list">${run.spotsFound.map(s=>`<li>${esc(s.name)}</li>`).join('')}</ul>`
+        : `<span style="color:#cbd5e0">—</span>`;
+
+      return `<tr>
+        <td style="white-space:nowrap">
+          <div style="font-weight:500">${fmtDate(run.startedAt)}</div>
+        </td>
+        <td style="color:var(--gray)">${dur}</td>
+        <td>${pill}</td>
+        <td>${spots}</td>
+        <td>${run.emailSent ? '<span class="email-yes">&#10003; Sent</span>' : '<span class="email-no">—</span>'}</td>
+        <td><span class="trigger-badge">${esc(run.triggeredBy||'schedule')}</span></td>
+      </tr>`;
+    }).join('');
   }
 
-  // ── Helpers ──────────────────────────────────────────────────────────────────
-  function setStatus(state, text) {
-    dot.className = `dot ${state}`;
-    statusTxt.textContent = text;
+  // ── Helpers ───────────────────────────────────────────────────────────────────
+  function setRunStatus(state, text) {
+    document.getElementById('dot2').className     = `dot ${state}`;
+    document.getElementById('statusText2').textContent = text;
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-CA',{month:'short',day:'numeric'})
+      + ' ' + d.toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit'});
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function showToast(msg) {
@@ -501,19 +510,11 @@
     setTimeout(() => t.classList.remove('show'), 2800);
   }
 
-  function fmtDate(iso) {
-    const d = new Date(iso);
-    return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
-      + ' ' + d.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' });
-  }
-
-  function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  // Load history on startup, then refresh every 60s
+  // ── Init ──────────────────────────────────────────────────────────────────────
+  syncStatus();
   loadHistory();
-  setInterval(loadHistory, 60000);
+  setInterval(syncStatus,    10000);   // sync scheduler state every 10s
+  setInterval(loadHistory,   60000);   // refresh history every 60s
 </script>
 </body>
 </html>
