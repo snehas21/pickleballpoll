@@ -18,6 +18,9 @@
       --red-bg:     #fff5f5;
       --red:        #c53030;
       --red-mid:    #fed7d7;
+      --orange-bg:  #fffbeb;
+      --orange:     #b7791f;
+      --orange-mid: #fbd38d;
       --gray:       #718096;
       --gray-light: #f7fafc;
       --border:     #e2e8f0;
@@ -26,170 +29,129 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #edf2f7;
-      color: var(--text);
-      min-height: 100vh;
-      padding: 1.5rem 1rem 3rem;
+      background: #edf2f7; color: var(--text);
+      min-height: 100vh; padding: 1.5rem 1rem 3rem;
     }
 
     /* ── Header ── */
     .header {
-      max-width: 960px;
-      margin: 0 auto 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.75rem;
+      max-width: 960px; margin: 0 auto 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.75rem;
     }
     .header-left { display: flex; align-items: center; gap: 0.6rem; }
     .header-left .emoji { font-size: 1.8rem; }
     .header-left h1 { font-size: 1.4rem; font-weight: 700; color: var(--green-dark); }
     .header-left p  { font-size: 0.8rem; color: var(--gray); margin-top: 1px; }
-
-    .header-right { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-
-    .badge {
-      border-radius: 999px;
-      padding: 0.2rem 0.75rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-    }
+    .header-right   { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .badge { border-radius: 999px; padding: 0.2rem 0.75rem; font-size: 0.72rem; font-weight: 600; }
     .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
     .badge-blue  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-mid);  }
-
     .icon-btn {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.4rem 0.75rem;
-      cursor: pointer;
-      font-size: 0.78rem;
-      color: var(--gray);
-      transition: background 0.1s, border-color 0.1s;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
+      background: #fff; border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.4rem 0.75rem; cursor: pointer; font-size: 0.78rem; color: var(--gray);
+      display: flex; align-items: center; gap: 0.35rem; transition: background 0.1s;
     }
-    .icon-btn:hover { background: var(--gray-light); border-color: #cbd5e0; }
+    .icon-btn:hover { background: var(--gray-light); }
 
     /* ── Stats ── */
     .stats {
-      max-width: 960px;
-      margin: 0 auto 1.25rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 0.75rem;
+      max-width: 960px; margin: 0 auto 1.25rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem;
     }
-    .stat-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      border: 1px solid var(--border);
-    }
-    .stat-card .label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 0.35rem; }
-    .stat-card .value { font-size: 1.5rem; font-weight: 700; color: var(--text); line-height: 1; }
-    .stat-card .sub   { font-size: 0.72rem; color: var(--gray); margin-top: 0.3rem; }
+    .stat-card { background: #fff; border-radius: 12px; padding: 1rem 1.25rem; border: 1px solid var(--border); }
+    .stat-card .label { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 0.3rem; }
+    .stat-card .value { font-size: 1.45rem; font-weight: 700; color: var(--text); line-height: 1; }
+    .stat-card .sub   { font-size: 0.7rem; color: var(--gray); margin-top: 0.25rem; }
 
     /* ── Main grid ── */
     .main {
-      max-width: 960px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 1rem;
+      max-width: 960px; margin: 0 auto;
+      display: grid; grid-template-columns: 300px 1fr; gap: 1rem;
     }
     @media (max-width: 720px) { .main { grid-template-columns: 1fr; } }
 
     /* ── Cards ── */
-    .card {
-      background: #fff;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-    }
+    .card { background: #fff; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
     .card-header {
-      padding: 0.9rem 1.25rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
     }
     .card-header h2 { font-size: 0.9rem; font-weight: 600; }
     .card-body { padding: 1.25rem; }
 
-    /* ── Poll button ── */
+    /* ── Buttons ── */
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.45rem;
-      background: var(--green);
-      color: #fff;
-      border: none;
-      border-radius: 9px;
-      padding: 0.7rem 1.4rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      transition: background 0.15s, transform 0.1s;
-      margin-bottom: 1rem;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      border: none; border-radius: 9px; padding: 0.65rem 1rem;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      transition: filter 0.15s, transform 0.1s;
     }
-    .btn:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-1px); }
+    .btn:hover:not(:disabled) { filter: brightness(0.9); transform: translateY(-1px); }
     .btn:active:not(:disabled) { transform: translateY(0); }
-    .btn:disabled { background: #a0aec0; cursor: not-allowed; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-poll  { background: var(--green);   color: #fff; grid-column: span 2; }
+    .btn-stop  { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-mid); }
+    .btn-start { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
 
     .spinner {
-      display: none;
-      width: 14px; height: 14px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      display: none; width: 13px; height: 13px;
+      border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
     }
-    .btn.loading .spinner { display: block; }
-    .btn.loading .btn-text { opacity: 0.75; }
+    .btn-poll.loading .spinner { display: block; }
+    .btn-poll.loading .btn-text { opacity: 0.75; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Info box ── */
+    /* ── Interval control ── */
+    .interval-row {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--gray-light); border: 1px solid var(--border);
+      border-radius: 9px; padding: 0.65rem 0.85rem; margin-bottom: 1rem;
+    }
+    .interval-row label { font-size: 0.78rem; color: var(--gray); white-space: nowrap; flex: 1; }
+    .interval-row input[type="number"] {
+      width: 64px; border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.3rem 0.5rem; font-size: 0.85rem; text-align: center;
+    }
+    .interval-row input:focus { outline: none; border-color: var(--green); }
+    .btn-apply {
+      background: var(--green); color: #fff; border: none; border-radius: 6px;
+      padding: 0.3rem 0.65rem; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+    }
+    .btn-apply:hover { background: var(--green-dark); }
+
+    /* ── Status dot ── */
+    .status-line { display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--gray); margin-bottom: 1rem; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot.running  { background: #f6ad55; animation: pulse 1s ease-in-out infinite; }
+    .dot.ok       { background: #68d391; }
+    .dot.stopped  { background: #fc8181; }
+    .dot.unknown  { background: #cbd5e0; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
     .info-box {
-      background: var(--blue-bg);
-      border: 1px solid var(--blue-mid);
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      font-size: 0.78rem;
-      color: var(--blue);
-      line-height: 1.5;
-      margin-bottom: 1rem;
+      background: var(--blue-bg); border: 1px solid var(--blue-mid);
+      border-radius: 8px; padding: 0.75rem 1rem;
+      font-size: 0.78rem; color: var(--blue); line-height: 1.5; margin-bottom: 1rem;
     }
     .info-box a { color: var(--blue); }
 
     .last-run-box {
-      background: var(--gray-light);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      font-size: 0.78rem;
-      color: var(--gray);
-      line-height: 1.6;
+      background: var(--gray-light); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem 1rem;
+      font-size: 0.78rem; color: var(--gray); line-height: 1.6;
     }
-    .last-run-box strong { color: var(--text); }
 
     /* ── History table ── */
     .history-scroll { max-height: 420px; overflow-y: auto; }
-
     table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
     thead th {
-      text-align: left;
-      padding: 0.5rem 0.85rem;
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      color: var(--gray);
-      border-bottom: 2px solid var(--border);
-      position: sticky; top: 0;
-      background: #fff;
+      text-align: left; padding: 0.5rem 0.85rem;
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: .05em; color: var(--gray);
+      border-bottom: 2px solid var(--border); position: sticky; top: 0; background: #fff;
     }
     tbody tr { border-bottom: 1px solid var(--border); }
     tbody tr:last-child { border-bottom: none; }
@@ -197,76 +159,53 @@
     tbody td { padding: 0.6rem 0.85rem; vertical-align: middle; }
 
     .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      border-radius: 999px;
-      padding: 0.2rem 0.65rem;
-      font-size: 0.68rem;
-      font-weight: 600;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      border-radius: 999px; padding: 0.2rem 0.65rem;
+      font-size: 0.68rem; font-weight: 600; white-space: nowrap;
     }
     .pill-success  { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
     .pill-no-spots { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-mid);  }
     .pill-error    { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-mid);   }
-    .pill-running  { background: #fffbeb; color: #b7791f; border: 1px solid #fbd38d; }
+    .pill-running  { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-mid); }
 
     .email-yes { color: var(--green); font-weight: 600; }
     .email-no  { color: #cbd5e0; }
-
     .trigger-badge {
       font-size: 0.65rem; color: var(--gray);
       background: var(--gray-light); border: 1px solid var(--border);
       border-radius: 4px; padding: 0.1rem 0.4rem;
     }
-
     .spots-list { margin: 0; padding: 0; list-style: none; }
     .spots-list li { font-size: 0.7rem; color: var(--gray); }
     .spots-list li::before { content: '• '; color: var(--green); }
-
     .empty-state { text-align: center; padding: 2.5rem; color: var(--gray); font-size: 0.82rem; }
 
     /* ── PAT modal ── */
     .overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 100;
+      align-items: center; justify-content: center;
     }
     .overlay.open { display: flex; }
     .modal {
-      background: #fff;
-      border-radius: 14px;
-      padding: 1.75rem 2rem;
-      width: 100%; max-width: 440px;
-      margin: 1rem;
+      background: #fff; border-radius: 14px; padding: 1.75rem 2rem;
+      width: 100%; max-width: 440px; margin: 1rem;
       box-shadow: 0 20px 60px rgba(0,0,0,0.2);
     }
-    .modal h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .modal p  { font-size: 0.82rem; color: var(--gray); line-height: 1.6; margin-bottom: 1rem; }
-    .modal ol { font-size: 0.82rem; color: var(--gray); padding-left: 1.25rem; line-height: 2; margin-bottom: 1rem; }
+    .modal h3  { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .modal p   { font-size: 0.82rem; color: var(--gray); line-height: 1.6; margin-bottom: 1rem; }
+    .modal ol  { font-size: 0.82rem; color: var(--gray); padding-left: 1.25rem; line-height: 2; margin-bottom: 1rem; }
     .modal ol a { color: var(--blue); }
-    .modal input[type="text"], .modal input[type="password"] {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.6rem 0.85rem;
-      font-size: 0.85rem;
-      margin-bottom: 0.75rem;
-      outline: none;
+    .modal input {
+      width: 100%; border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.6rem 0.85rem; font-size: 0.85rem; margin-bottom: 0.75rem;
     }
-    .modal input:focus { border-color: var(--green); box-shadow: 0 0 0 2px rgba(39,103,73,0.15); }
+    .modal input:focus { outline: none; border-color: var(--green); }
     .modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
-    .btn-sm {
-      border: none; border-radius: 7px;
-      padding: 0.5rem 1rem; font-size: 0.82rem; font-weight: 600;
-      cursor: pointer;
-    }
+    .btn-sm { border: none; border-radius: 7px; padding: 0.5rem 1rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
     .btn-sm-primary { background: var(--green); color: #fff; }
     .btn-sm-primary:hover { background: var(--green-dark); }
-    .btn-sm-ghost { background: var(--gray-light); color: var(--gray); border: 1px solid var(--border); }
+    .btn-sm-ghost   { background: var(--gray-light); color: var(--gray); border: 1px solid var(--border); }
 
     /* ── Toast ── */
     .toast {
@@ -275,8 +214,7 @@
       background: var(--green-dark); color: #fff;
       padding: 0.6rem 1.3rem; border-radius: 999px;
       font-size: 0.85rem; font-weight: 500;
-      transition: transform 0.3s ease;
-      z-index: 999; pointer-events: none;
+      transition: transform 0.3s ease; z-index: 999; pointer-events: none;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
@@ -295,8 +233,8 @@
   <div class="header-right">
     <span class="badge badge-green">Drop-in sessions</span>
     <span class="badge badge-blue">Ages 40–50</span>
-    <span class="badge badge-blue">Every 30 min</span>
-    <button class="icon-btn" onclick="openPatModal()" title="GitHub token settings">&#9881; Settings</button>
+    <span class="badge badge-blue" id="intervalBadge">Every 30 min</span>
+    <button class="icon-btn" onclick="openPatModal()">&#9881; Settings</button>
   </div>
 </div>
 
@@ -320,6 +258,11 @@
     <div class="value" id="statLast" style="font-size:0.95rem">—</div>
     <div class="sub" id="statLastStatus"></div>
   </div>
+  <div class="stat-card">
+    <div class="label">Scheduler</div>
+    <div class="value" id="statScheduler" style="font-size:1rem">—</div>
+    <div class="sub" id="statInterval"></div>
+  </div>
 </div>
 
 <!-- Main -->
@@ -327,21 +270,40 @@
 
   <!-- Left: controls -->
   <div class="card">
-    <div class="card-header"><h2>Controls</h2></div>
+    <div class="card-header">
+      <h2>Controls</h2>
+      <div class="status-line" style="margin:0">
+        <span class="dot unknown" id="dot"></span>
+        <span id="statusText">Loading…</span>
+      </div>
+    </div>
     <div class="card-body">
-      <button class="btn" id="pollBtn" onclick="triggerPoll()">
-        <div class="spinner"></div>
-        <span class="btn-text">&#9654; Poll Now</span>
-      </button>
 
-      <div class="info-box" id="patHint">
-        To use Poll Now, add your GitHub token in
-        <a href="#" onclick="openPatModal();return false">Settings</a>.
-        The token needs <strong>workflow</strong> permission.
+      <div class="btn-row">
+        <button class="btn btn-poll" id="pollBtn" onclick="triggerPoll()" disabled>
+          <div class="spinner"></div>
+          <span class="btn-text">&#9654; Poll Now</span>
+        </button>
+        <button class="btn btn-stop"  id="stopBtn"  onclick="stopScheduler()"  disabled>&#9646;&#9646; Stop</button>
+        <button class="btn btn-start" id="startBtn" onclick="startScheduler()" disabled>&#9654; Resume</button>
       </div>
 
-      <div class="last-run-box" id="lastRunBox">
-        <div id="lastRunContent">Loading last run…</div>
+      <!-- Interval -->
+      <div class="interval-row">
+        <label for="intervalInput">Check every</label>
+        <input type="number" id="intervalInput" min="5" max="1440" value="30" />
+        <span style="font-size:0.78rem;color:var(--gray)">min</span>
+        <button class="btn-apply" id="applyBtn" onclick="applyInterval()" disabled>Apply</button>
+      </div>
+
+      <div class="info-box" id="patHint">
+        Add a GitHub token in <a href="#" onclick="openPatModal();return false">Settings</a> to
+        enable Poll Now, Stop, Resume, and interval changes.
+        Token needs <strong>workflow</strong> + <strong>repo</strong> scopes.
+      </div>
+
+      <div class="last-run-box">
+        <div id="lastRunContent">Loading…</div>
       </div>
     </div>
   </div>
@@ -376,11 +338,11 @@
 <!-- PAT modal -->
 <div class="overlay" id="overlay" onclick="closeModalOnOverlay(event)">
   <div class="modal">
-    <h3>GitHub Token</h3>
-    <p>A Personal Access Token (PAT) lets the Poll Now button trigger a GitHub Actions run directly from this page. It's stored only in your browser.</p>
+    <h3>GitHub Token (PAT)</h3>
+    <p>Stored only in your browser. Enables Poll Now, Stop/Resume, and interval changes.</p>
     <ol>
       <li>Go to <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a></li>
-      <li>Select scope: <strong>workflow</strong></li>
+      <li>Select scopes: <strong>workflow</strong> and <strong>repo</strong></li>
       <li>Generate and paste below</li>
     </ol>
     <input type="password" id="patInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
@@ -395,139 +357,227 @@
 
 <script>
   // ── Config ────────────────────────────────────────────────────────────────────
-  const GITHUB_OWNER   = 'snehas21';
-  const GITHUB_REPO    = 'pickleballpoll';
-  const GITHUB_BRANCH  = 'main';
-  const WORKFLOW_FILE  = 'poll.yml';
+  const OWNER         = 'snehas21';
+  const REPO          = 'pickleballpoll';
+  const BRANCH        = 'main';
+  const WORKFLOW_FILE = 'poll.yml';
+  const WORKFLOW_PATH = '.github/workflows/poll.yml';
+  const RUNS_URL      = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/runs.json`;
 
-  const RUNS_JSON_URL =
-    `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/runs.json`;
+  // ── PAT ───────────────────────────────────────────────────────────────────────
+  function getPat()  { return localStorage.getItem('gh_pat') || ''; }
 
-  // ── PAT helpers ───────────────────────────────────────────────────────────────
-  function getPat()       { return localStorage.getItem('gh_pat') || ''; }
-  function savePat()      {
-    const val = document.getElementById('patInput').value.trim();
-    if (!val) { showToast('Token cannot be empty'); return; }
-    localStorage.setItem('gh_pat', val);
+  function savePat() {
+    const v = document.getElementById('patInput').value.trim();
+    if (!v) { showToast('Token cannot be empty'); return; }
+    localStorage.setItem('gh_pat', v);
     closeModal();
-    updatePatHint();
+    updateControlState();
     showToast('Token saved');
+    loadWorkflowState();
   }
+
   function openPatModal() {
     document.getElementById('patInput').value = getPat();
     document.getElementById('overlay').classList.add('open');
   }
-  function closeModal()   { document.getElementById('overlay').classList.remove('open'); }
-  function closeModalOnOverlay(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
-  function updatePatHint() {
-    const hint = document.getElementById('patHint');
-    if (getPat()) {
-      hint.style.display = 'none';
-      document.getElementById('pollBtn').disabled = false;
+  function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+  function closeModalOnOverlay(e) { if (e.target.id === 'overlay') closeModal(); }
+
+  function updateControlState() {
+    const hasPat = !!getPat();
+    document.getElementById('patHint').style.display   = hasPat ? 'none' : 'block';
+    document.getElementById('pollBtn').disabled        = !hasPat;
+    document.getElementById('applyBtn').disabled       = !hasPat;
+    // stop/start buttons enabled after workflow state is loaded
+  }
+
+  // ── GitHub API helpers ────────────────────────────────────────────────────────
+  async function ghFetch(path, opts = {}) {
+    const pat = getPat();
+    return fetch(`https://api.github.com${path}`, {
+      ...opts,
+      headers: {
+        'Authorization':        `Bearer ${pat}`,
+        'Accept':               'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type':         'application/json',
+        ...(opts.headers || {}),
+      },
+    });
+  }
+
+  // ── Workflow state ────────────────────────────────────────────────────────────
+  let workflowEnabled = null;   // true | false | null (unknown)
+
+  async function loadWorkflowState() {
+    if (!getPat()) return;
+    const res = await ghFetch(`/repos/${OWNER}/${REPO}/actions/workflows/${WORKFLOW_FILE}`).catch(()=>null);
+    if (!res || !res.ok) return;
+    const data = await res.json();
+    workflowEnabled = data.state === 'active';
+    renderSchedulerState();
+  }
+
+  function renderSchedulerState() {
+    const dot  = document.getElementById('dot');
+    const txt  = document.getElementById('statusText');
+    const stop = document.getElementById('stopBtn');
+    const start = document.getElementById('startBtn');
+    const hasPat = !!getPat();
+
+    if (workflowEnabled === null) {
+      dot.className = 'dot unknown'; txt.textContent = hasPat ? 'Loading state…' : 'Token required';
+      stop.disabled = true; start.disabled = true;
+    } else if (workflowEnabled) {
+      dot.className = 'dot ok'; txt.textContent = 'Scheduler active';
+      stop.disabled = !hasPat; start.disabled = true;
+      document.getElementById('statScheduler').innerHTML = '&#128994; Active';
     } else {
-      hint.style.display = 'block';
-      document.getElementById('pollBtn').disabled = true;
+      dot.className = 'dot stopped'; txt.textContent = 'Scheduler disabled';
+      stop.disabled = true; start.disabled = !hasPat;
+      document.getElementById('statScheduler').innerHTML = '&#128308; Disabled';
     }
   }
 
   // ── Poll Now ──────────────────────────────────────────────────────────────────
   async function triggerPoll() {
-    const pat = getPat();
-    if (!pat) { openPatModal(); return; }
-
     const btn = document.getElementById('pollBtn');
-    btn.disabled = true;
-    btn.classList.add('loading');
+    btn.disabled = true; btn.classList.add('loading');
 
-    try {
-      const res = await fetch(
-        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${WORKFLOW_FILE}/dispatches`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${pat}`,
-            'Accept': 'application/vnd.github+json',
-            'X-GitHub-Api-Version': '2022-11-28',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ref: GITHUB_BRANCH }),
-        }
-      );
+    const res = await ghFetch(
+      `/repos/${OWNER}/${REPO}/actions/workflows/${WORKFLOW_FILE}/dispatches`,
+      { method: 'POST', body: JSON.stringify({ ref: BRANCH }) }
+    ).catch(() => null);
 
-      if (res.status === 204) {
-        showToast('Poll triggered! Check Actions tab for progress.');
-        // Refresh history after a short delay to pick up the new run
-        setTimeout(loadHistory, 8000);
-      } else if (res.status === 401) {
-        showToast('Token invalid or expired — check Settings');
-        localStorage.removeItem('gh_pat');
-        updatePatHint();
-      } else if (res.status === 403) {
-        showToast('Token missing "workflow" permission');
-      } else {
-        const body = await res.json().catch(() => ({}));
-        showToast(`Error ${res.status}: ${body.message || 'Unknown error'}`);
-      }
-    } catch (e) {
-      showToast('Network error — are you online?');
-    } finally {
-      setTimeout(() => { btn.disabled = !getPat(); btn.classList.remove('loading'); }, 3000);
+    if (res?.status === 204) {
+      showToast('Poll triggered! History will update after the run completes.');
+      setTimeout(loadHistory, 15000);
+    } else if (res?.status === 401) {
+      showToast('Token invalid — check Settings');
+      localStorage.removeItem('gh_pat'); updateControlState();
+    } else if (res?.status === 403) {
+      showToast('Token needs "workflow" permission');
+    } else {
+      showToast(`Failed (${res?.status || 'network error'})`);
+    }
+
+    setTimeout(() => { btn.disabled = !getPat(); btn.classList.remove('loading'); }, 3000);
+  }
+
+  // ── Stop / Resume scheduler ───────────────────────────────────────────────────
+  async function stopScheduler() {
+    const res = await ghFetch(
+      `/repos/${OWNER}/${REPO}/actions/workflows/${WORKFLOW_FILE}/disable`,
+      { method: 'PUT' }
+    ).catch(() => null);
+
+    if (res?.status === 204) {
+      workflowEnabled = false; renderSchedulerState();
+      showToast('Scheduler disabled — no more automatic runs');
+    } else {
+      showToast(`Failed to disable (${res?.status || 'error'})`);
+    }
+  }
+
+  async function startScheduler() {
+    const res = await ghFetch(
+      `/repos/${OWNER}/${REPO}/actions/workflows/${WORKFLOW_FILE}/enable`,
+      { method: 'PUT' }
+    ).catch(() => null);
+
+    if (res?.status === 204) {
+      workflowEnabled = true; renderSchedulerState();
+      showToast('Scheduler resumed');
+    } else {
+      showToast(`Failed to enable (${res?.status || 'error'})`);
+    }
+  }
+
+  // ── Change interval (updates cron in poll.yml via GitHub API) ─────────────────
+  async function applyInterval() {
+    const mins = parseInt(document.getElementById('intervalInput').value);
+    if (!mins || mins < 5) { showToast('Minimum interval is 5 minutes (GitHub limit)'); return; }
+
+    // Fetch current workflow file
+    const fileRes = await ghFetch(`/repos/${OWNER}/${REPO}/contents/${WORKFLOW_PATH}`).catch(()=>null);
+    if (!fileRes || !fileRes.ok) { showToast('Could not fetch workflow file'); return; }
+    const fileData  = await fileRes.json();
+    const content   = atob(fileData.content.replace(/\n/g, ''));
+
+    // Replace the cron expression (handles any */N or specific minute pattern)
+    const newCron    = `*/${mins} * * * *`;
+    const newContent = content.replace(/cron:\s*'[^']+'/g, `cron: '${newCron}'`);
+
+    if (newContent === content) { showToast('Could not find cron line in workflow'); return; }
+
+    // Commit the updated file
+    const putRes = await ghFetch(`/repos/${OWNER}/${REPO}/contents/${WORKFLOW_PATH}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        message: `chore: set poll interval to ${mins} min [skip ci]`,
+        content: btoa(newContent),
+        sha:     fileData.sha,
+        branch:  BRANCH,
+      }),
+    }).catch(() => null);
+
+    if (putRes?.status === 200 || putRes?.status === 201) {
+      document.getElementById('intervalBadge').textContent = `Every ${mins} min`;
+      document.getElementById('statInterval').textContent  = `${mins} min interval`;
+      showToast(`Interval updated to ${mins} min — takes effect on next scheduled run`);
+    } else {
+      showToast(`Failed to update interval (${putRes?.status || 'error'})`);
     }
   }
 
   // ── Load history ──────────────────────────────────────────────────────────────
   async function loadHistory() {
-    const res = await fetch(`${RUNS_JSON_URL}?_=${Date.now()}`).catch(() => null);
+    const res = await fetch(`${RUNS_URL}?_=${Date.now()}`).catch(() => null);
     if (!res || !res.ok) {
       document.getElementById('historyBody').innerHTML =
         `<tr><td colspan="6" class="empty-state">Could not load history. Make sure the repo is public and runs.json exists.</td></tr>`;
       return;
     }
-
     const runs = await res.json();
     updateStats(runs);
     updateLastRun(runs);
 
     const tbody = document.getElementById('historyBody');
-    if (runs.length === 0) {
+    if (!runs.length) {
       tbody.innerHTML = `<tr><td colspan="6" class="empty-state">No runs yet — trigger a poll to get started.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = runs.map(run => {
-      const started  = run.startedAt  ? fmtDate(run.startedAt)  : '—';
-      const duration = (run.startedAt && run.finishedAt)
+      const dur = (run.startedAt && run.finishedAt)
         ? `${Math.round((new Date(run.finishedAt) - new Date(run.startedAt)) / 1000)}s`
         : run.status === 'running' ? '…' : '—';
 
-      const statusPill = {
+      const pill = {
         success:  `<span class="pill pill-success">&#10003; Spots found</span>`,
         no_spots: `<span class="pill pill-no-spots">No spots</span>`,
-        error:    `<span class="pill pill-error" title="${escHtml(run.error || '')}">&#10007; Error</span>`,
+        error:    `<span class="pill pill-error" title="${esc(run.error||'')}">&#10007; Error</span>`,
         running:  `<span class="pill pill-running">Running…</span>`,
-      }[run.status] || `<span class="pill">${escHtml(run.status)}</span>`;
+      }[run.status] || `<span class="pill">${esc(run.status)}</span>`;
 
-      const spotsCell = run.spotsFound && run.spotsFound.length > 0
-        ? `<ul class="spots-list">${run.spotsFound.map(s => `<li>${escHtml(s.name)}</li>`).join('')}</ul>`
+      const spots = run.spotsFound?.length
+        ? `<ul class="spots-list">${run.spotsFound.map(s=>`<li>${esc(s.name)}</li>`).join('')}</ul>`
         : `<span style="color:#cbd5e0">—</span>`;
 
-      const emailCell = run.emailSent
-        ? `<span class="email-yes">&#10003; Sent</span>`
-        : `<span class="email-no">—</span>`;
-
       return `<tr>
-        <td style="white-space:nowrap">${started}</td>
-        <td style="color:var(--gray)">${duration}</td>
-        <td>${statusPill}</td>
-        <td>${spotsCell}</td>
-        <td>${emailCell}</td>
-        <td><span class="trigger-badge">${escHtml(run.triggeredBy || 'schedule')}</span></td>
+        <td style="white-space:nowrap"><div style="font-weight:500">${fmtDate(run.startedAt)}</div></td>
+        <td style="color:var(--gray)">${dur}</td>
+        <td>${pill}</td>
+        <td>${spots}</td>
+        <td>${run.emailSent ? '<span class="email-yes">&#10003;</span>' : '<span class="email-no">—</span>'}</td>
+        <td><span class="trigger-badge">${esc(run.triggeredBy||'schedule')}</span></td>
       </tr>`;
     }).join('');
   }
 
   function updateStats(runs) {
-    const totalSpots  = runs.reduce((s, r) => s + (r.spotsFound ? r.spotsFound.length : 0), 0);
+    const totalSpots  = runs.reduce((s, r) => s + (r.spotsFound?.length || 0), 0);
     const totalEmails = runs.filter(r => r.emailSent).length;
     const last        = runs.find(r => r.status !== 'running');
 
@@ -538,61 +588,60 @@
     if (last) {
       document.getElementById('statLast').textContent       = fmtDate(last.finishedAt || last.startedAt);
       document.getElementById('statLastStatus').textContent =
-        last.status === 'success'  ? '&#128994; Spots found' :
+        last.status === 'success'  ? '&#128994; Spots found'    :
         last.status === 'no_spots' ? '&#128309; None available' :
-        last.status === 'error'    ? '&#128308; Error' : '';
+        last.status === 'error'    ? '&#128308; Error'          : '';
     }
   }
 
   function updateLastRun(runs) {
     const last = runs[0];
-    const box  = document.getElementById('lastRunContent');
-    if (!last) { box.innerHTML = 'No runs recorded yet.'; return; }
-
-    const ago = last.startedAt ? timeAgo(last.startedAt) : '';
-    const statusLabel =
+    const el   = document.getElementById('lastRunContent');
+    if (!last) { el.innerHTML = 'No runs yet.'; return; }
+    const ago    = timeAgo(last.startedAt);
+    const status =
       last.status === 'success'  ? '&#x2705; Spots found — email sent!' :
-      last.status === 'no_spots' ? 'No open spots found' :
-      last.status === 'error'    ? `&#x274C; Error: ${escHtml(last.error || '')}` :
-      last.status === 'running'  ? '&#x23F3; Poll in progress…' : last.status;
+      last.status === 'no_spots' ? 'No open spots found'                 :
+      last.status === 'error'    ? `&#x274C; ${esc(last.error || 'Error')}` :
+      last.status === 'running'  ? '&#x23F3; In progress…'              : last.status;
 
-    box.innerHTML = `
-      <strong>Last run</strong> &mdash; ${ago}<br>
-      ${statusLabel}<br>
-      <span style="font-size:0.7rem">${fmtDate(last.startedAt)} &bull; ${escHtml(last.triggeredBy || 'schedule')}</span>
-    `;
+    el.innerHTML = `<strong>Last run</strong> &mdash; ${ago}<br>
+      ${status}<br>
+      <span style="font-size:0.7rem">${fmtDate(last.startedAt)} &bull; ${esc(last.triggeredBy||'schedule')}</span>`;
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────────
   function fmtDate(iso) {
+    if (!iso) return '—';
     const d = new Date(iso);
-    return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })
-      + ' ' + d.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleDateString('en-CA',{month:'short',day:'numeric'})
+      + ' ' + d.toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit'});
   }
 
   function timeAgo(iso) {
-    const sec = Math.round((Date.now() - new Date(iso)) / 1000);
-    if (sec < 60)   return `${sec}s ago`;
-    if (sec < 3600) return `${Math.floor(sec/60)}m ago`;
-    if (sec < 86400)return `${Math.floor(sec/3600)}h ago`;
-    return `${Math.floor(sec/86400)}d ago`;
+    const s = Math.round((Date.now() - new Date(iso)) / 1000);
+    if (s < 60)    return `${s}s ago`;
+    if (s < 3600)  return `${Math.floor(s/60)}m ago`;
+    if (s < 86400) return `${Math.floor(s/3600)}h ago`;
+    return `${Math.floor(s/86400)}d ago`;
   }
 
-  function escHtml(s) {
+  function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function showToast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
+    t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
   // ── Init ──────────────────────────────────────────────────────────────────────
-  updatePatHint();
+  updateControlState();
+  loadWorkflowState();
   loadHistory();
-  setInterval(loadHistory, 60000);   // auto-refresh every 60s
+  setInterval(loadHistory, 60000);
+  setInterval(loadWorkflowState, 30000);
 </script>
 </body>
 </html>
