@@ -1,0 +1,68 @@
+name: Pickleball Availability Poller
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed to commit runs.json back to the repo
+
+jobs:
+  poll:
+    name: Check for Pickleball Drop-In Spots
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # fetch full history so we can pull & push cleanly
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Write .env from secrets
+        run: |
+          cat <<EOF > .env
+          AC_USERNAME=${{ secrets.AC_USERNAME }}
+          AC_PASSWORD=${{ secrets.AC_PASSWORD }}
+          SMTP_HOST=${{ secrets.SMTP_HOST }}
+          SMTP_PORT=${{ secrets.SMTP_PORT }}
+          SMTP_USER=${{ secrets.SMTP_USER }}
+          SMTP_PASS=${{ secrets.SMTP_PASS }}
+          NOTIFY_EMAIL=${{ secrets.NOTIFY_EMAIL }}
+          EOF
+
+      - name: Run availability check
+        run: node poll-once.js
+
+      - name: Commit updated run history
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin ${{ github.ref_name }}
+          git add runs.json
+          # Only commit if runs.json actually changed
+          git diff --cached --quiet || git commit -m "chore: update run history [skip ci]"
+          git push origin ${{ github.ref_name }}
+
+      - name: Upload error screenshots (if any)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-screenshots
+          path: error-*.png
+          if-no-files-found: ignore
+          retention-days: 3
