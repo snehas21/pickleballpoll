@@ -1,0 +1,15 @@
+{
+  "name": "pickleballpoll",
+  "version": "1.0.0",
+  "description": "Polls Active Communities (Richmond Hill) every 30 minutes for pickleball drop-in availability and sends email alerts",
+  "main": "poller.js",
+  "scripts": {
+    "start": "node poller.js",
+    "install-browser": "npx playwright install chromium"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "nodemailer": "^6.10.1",
+    "playwright": "^1.58.2"
+  }
+}
