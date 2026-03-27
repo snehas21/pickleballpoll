@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pickleball Poller — Richmond Hill</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 2rem 2.5rem;
+      width: 100%;
+      max-width: 680px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.4rem;
+    }
+
+    header .emoji { font-size: 2.2rem; }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #22543d;
+    }
+
+    .subtitle {
+      color: #718096;
+      font-size: 0.9rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.8rem;
+    }
+
+    .badge {
+      background: #ebf8ff;
+      color: #2b6cb0;
+      border: 1px solid #bee3f8;
+      border-radius: 999px;
+      padding: 0.25rem 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .badge.green {
+      background: #f0fff4;
+      color: #276749;
+      border-color: #9ae6b4;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #276749;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.75rem 1.6rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      margin-bottom: 1.8rem;
+    }
+
+    .btn:hover:not(:disabled) { background: #22543d; transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+
+    .btn:disabled {
+      background: #a0aec0;
+      cursor: not-allowed;
+    }
+
+    .btn .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    .btn.loading .spinner { display: block; }
+    .btn.loading .btn-text { opacity: 0.7; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #718096;
+      margin-bottom: 0.75rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #68d391;
+      flex-shrink: 0;
+    }
+
+    .dot.idle   { background: #68d391; }
+    .dot.active { background: #f6ad55; animation: pulse 1s ease-in-out infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    .log-box {
+      background: #1a202c;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      height: 340px;
+      overflow-y: auto;
+      font-family: 'Menlo', 'Consolas', 'Courier New', monospace;
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .log-box p {
+      color: #a0aec0;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .log-box p.success { color: #68d391; }
+    .log-box p.error   { color: #fc8181; }
+    .log-box p.warn    { color: #f6ad55; }
+    .log-box p.info    { color: #63b3ed; }
+
+    .log-box .placeholder {
+      color: #4a5568;
+      font-style: italic;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #276749;
+      color: #fff;
+      padding: 0.65rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: transform 0.3s ease;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    .footer {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: #a0aec0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <header>
+    <span class="emoji">🏓</span>
+    <h1>Pickleball Poller</h1>
+  </header>
+  <p class="subtitle">Richmond Hill — Active Communities</p>
+
+  <div class="badges">
+    <span class="badge green">Drop-in sessions</span>
+    <span class="badge">Ages 40–50</span>
+    <span class="badge">Auto-polls every 30 min</span>
+  </div>
+
+  <button class="btn" id="pollBtn" onclick="triggerPoll()">
+    <div class="spinner"></div>
+    <span class="btn-text">Poll Now</span>
+  </button>
+
+  <div class="status-bar">
+    <span class="dot idle" id="dot"></span>
+    <span id="statusText">Idle — waiting for next scheduled check</span>
+  </div>
+
+  <div class="log-box" id="logBox">
+    <p class="placeholder">Logs will appear here…</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<p class="footer">Alerts sent to snehashis@gmail.com when spots open up.</p>
+
+<script>
+  const logBox    = document.getElementById('logBox');
+  const btn       = document.getElementById('pollBtn');
+  const dot       = document.getElementById('dot');
+  const statusTxt = document.getElementById('statusText');
+  let   firstLog  = true;
+
+  // ── Live log stream ──────────────────────────────────────────────────────────
+  const evtSource = new EventSource('/log-stream');
+
+  evtSource.onmessage = e => {
+    const line = JSON.parse(e.data);
+
+    if (firstLog) {
+      logBox.innerHTML = '';
+      firstLog = false;
+    }
+
+    const p = document.createElement('p');
+    p.textContent = line;
+
+    if (/✅|found \d+ available/i.test(line))      p.className = 'success';
+    else if (/❌|error/i.test(line))               p.className = 'error';
+    else if (/⚠|warn|skipped/i.test(line))        p.className = 'warn';
+    else if (/starting|navigated|loaded|logged/i.test(line)) p.className = 'info';
+
+    logBox.appendChild(p);
+    logBox.scrollTop = logBox.scrollHeight;
+
+    // Update status dot based on log content
+    if (/starting availability/i.test(line)) setStatus('active', 'Polling in progress…');
+    if (/no available|email alert|error/i.test(line)) setStatus('idle', `Last checked: ${new Date().toLocaleTimeString()}`);
+    if (/✅/.test(line)) setStatus('idle', `Spot found! ${new Date().toLocaleTimeString()}`);
+  };
+
+  // ── Trigger manual poll ──────────────────────────────────────────────────────
+  async function triggerPoll() {
+    btn.disabled = true;
+    btn.classList.add('loading');
+    setStatus('active', 'Manual poll triggered…');
+
+    try {
+      const res  = await fetch('/poll', { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(data.error || 'Failed to start poll');
+        btn.disabled = false;
+        btn.classList.remove('loading');
+        setStatus('idle', 'Poll request rejected');
+      } else {
+        showToast('Poll started!');
+        // Re-enable after a few seconds (the poll runs async server-side)
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.classList.remove('loading');
+        }, 5000);
+      }
+    } catch {
+      showToast('Could not reach server');
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      setStatus('idle', 'Connection error');
+    }
+  }
+
+  function setStatus(state, text) {
+    dot.className = `dot ${state}`;
+    statusTxt.textContent = text;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // Keyboard shortcut: Enter or Space on the button
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && document.activeElement !== btn) {
+      btn.focus();
+    }
+  });
+</script>
+</body>
+</html>
