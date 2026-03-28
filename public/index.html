@@ -6,134 +6,84 @@
   <title>Pickleball Poller — Richmond Hill</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --green:      #276749;
-      --green-dark: #22543d;
-      --green-bg:   #f0fff4;
-      --green-mid:  #9ae6b4;
-      --blue-bg:    #ebf8ff;
-      --blue:       #2b6cb0;
-      --blue-mid:   #bee3f8;
-      --red-bg:     #fff5f5;
-      --red:        #c53030;
-      --red-mid:    #fed7d7;
-      --orange-bg:  #fffbeb;
-      --orange:     #b7791f;
-      --orange-mid: #fbd38d;
-      --gray:       #718096;
-      --gray-light: #f7fafc;
-      --border:     #e2e8f0;
-      --text:       #1a202c;
+      --green:      #276749; --green-dark: #22543d;
+      --green-bg:   #f0fff4; --green-mid:  #9ae6b4;
+      --blue-bg:    #ebf8ff; --blue:       #2b6cb0; --blue-mid: #bee3f8;
+      --red-bg:     #fff5f5; --red:        #c53030; --red-mid:  #fed7d7;
+      --orange-bg:  #fffbeb; --orange:     #b7791f; --orange-mid:#fbd38d;
+      --gray: #718096; --gray-light: #f7fafc; --border: #e2e8f0; --text: #1a202c;
     }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #edf2f7;
-      color: var(--text);
-      min-height: 100vh;
-      padding: 1.5rem 1rem 3rem;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+           background: #edf2f7; color: var(--text); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
 
     /* ── Header ── */
-    .header {
-      max-width: 960px;
-      margin: 0 auto 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
+    .header { max-width: 1100px; margin: 0 auto 1.25rem; display: flex; align-items: center;
+              justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
     .header-title { display: flex; align-items: center; gap: 0.6rem; }
     .header-title .emoji { font-size: 1.8rem; }
-    .header-title h1  { font-size: 1.4rem; font-weight: 700; color: var(--green-dark); }
-    .header-title p   { font-size: 0.8rem; color: var(--gray); margin-top: 1px; }
+    .header-title h1 { font-size: 1.35rem; font-weight: 700; color: var(--green-dark); }
+    .header-title p  { font-size: 0.78rem; color: var(--gray); margin-top: 1px; }
     .badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-    .badge {
-      border-radius: 999px; padding: 0.2rem 0.75rem;
-      font-size: 0.72rem; font-weight: 600;
-    }
+    .badge { border-radius: 999px; padding: 0.2rem 0.75rem; font-size: 0.7rem; font-weight: 600; }
     .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
     .badge-blue  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-mid);  }
 
     /* ── Stats ── */
-    .stats {
-      max-width: 960px; margin: 0 auto 1.25rem;
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem;
-    }
-    .stat-card { background: #fff; border-radius: 12px; padding: 1rem 1.25rem; border: 1px solid var(--border); }
-    .stat-card .label { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 0.3rem; }
-    .stat-card .value { font-size: 1.45rem; font-weight: 700; color: var(--text); line-height: 1; }
-    .stat-card .sub   { font-size: 0.7rem; color: var(--gray); margin-top: 0.25rem; }
+    .stats { max-width: 1100px; margin: 0 auto 1.1rem;
+             display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.65rem; }
+    .stat-card { background: #fff; border-radius: 11px; padding: 0.9rem 1.1rem; border: 1px solid var(--border); }
+    .stat-card .label { font-size: 0.68rem; color: var(--gray); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 0.3rem; }
+    .stat-card .value { font-size: 1.4rem; font-weight: 700; line-height: 1; }
+    .stat-card .sub   { font-size: 0.68rem; color: var(--gray); margin-top: 0.25rem; }
 
-    /* ── Main grid ── */
-    .main {
-      max-width: 960px; margin: 0 auto;
-      display: grid; grid-template-columns: 300px 1fr; gap: 1rem;
-    }
-    @media (max-width: 700px) { .main { grid-template-columns: 1fr; } }
+    /* ── Layout ── */
+    .layout { max-width: 1100px; margin: 0 auto; display: grid;
+              grid-template-columns: 310px 1fr; grid-template-rows: auto auto; gap: 1rem; }
+    @media (max-width: 780px) { .layout { grid-template-columns: 1fr; } }
 
     /* ── Cards ── */
-    .card { background: #fff; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
-    .card-header {
-      padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .card-header h2 { font-size: 0.9rem; font-weight: 600; }
-    .card-body { padding: 1.25rem; }
+    .card { background: #fff; border-radius: 13px; border: 1px solid var(--border); overflow: hidden; }
+    .card-header { padding: 0.85rem 1.2rem; border-bottom: 1px solid var(--border);
+                   display: flex; align-items: center; justify-content: space-between; }
+    .card-header h2 { font-size: 0.88rem; font-weight: 600; }
+    .card-body { padding: 1.2rem; }
 
     /* ── Buttons ── */
-    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
-
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin-bottom: 0.85rem; }
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
-      border: none; border-radius: 9px; padding: 0.65rem 1rem;
-      font-size: 0.85rem; font-weight: 600; cursor: pointer;
-      transition: filter 0.15s, transform 0.1s;
+      border: none; border-radius: 8px; padding: 0.6rem 0.9rem;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      transition: filter 0.12s, transform 0.1s;
     }
-    .btn:hover:not(:disabled) { filter: brightness(0.92); transform: translateY(-1px); }
+    .btn:hover:not(:disabled) { filter: brightness(0.9); transform: translateY(-1px); }
     .btn:active:not(:disabled) { transform: translateY(0); }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-
-    .btn-poll    { background: var(--green); color: #fff; grid-column: span 2; }
-    .btn-stop    { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-mid); }
-    .btn-start   { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-mid); }
-
-    .spinner {
-      display: none; width: 13px; height: 13px;
-      border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
-      border-radius: 50%; animation: spin 0.7s linear infinite;
-    }
+    .btn:disabled { opacity: 0.42; cursor: not-allowed; }
+    .btn-poll  { background: var(--green); color: #fff; grid-column: span 2; }
+    .btn-stop  { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-mid); }
+    .btn-start { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
+    .spinner { display: none; width: 13px; height: 13px;
+               border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
+               border-radius: 50%; animation: spin 0.7s linear infinite; }
     .btn-poll.loading .spinner { display: block; }
     .btn-poll.loading .btn-text { opacity: 0.75; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Interval control ── */
-    .interval-row {
-      display: flex; align-items: center; gap: 0.5rem;
-      background: var(--gray-light); border: 1px solid var(--border);
-      border-radius: 9px; padding: 0.65rem 0.85rem;
-      margin-bottom: 1rem;
-    }
-    .interval-row label { font-size: 0.78rem; color: var(--gray); white-space: nowrap; flex: 1; }
-    .interval-row input[type="number"] {
-      width: 64px; border: 1px solid var(--border); border-radius: 6px;
-      padding: 0.3rem 0.5rem; font-size: 0.85rem; text-align: center;
-    }
+    /* ── Interval row ── */
+    .interval-row { display: flex; align-items: center; gap: 0.45rem;
+                    background: var(--gray-light); border: 1px solid var(--border);
+                    border-radius: 8px; padding: 0.6rem 0.8rem; margin-bottom: 0.85rem; }
+    .interval-row label { font-size: 0.76rem; color: var(--gray); white-space: nowrap; flex: 1; }
+    .interval-row input[type="number"] { width: 56px; border: 1px solid var(--border);
+      border-radius: 5px; padding: 0.28rem 0.45rem; font-size: 0.82rem; text-align: center; }
     .interval-row input:focus { outline: none; border-color: var(--green); }
-    .btn-apply {
-      background: var(--green); color: #fff; border: none; border-radius: 6px;
-      padding: 0.3rem 0.65rem; font-size: 0.78rem; font-weight: 600; cursor: pointer;
-      white-space: nowrap;
-    }
+    .btn-apply { background: var(--green); color: #fff; border: none; border-radius: 5px;
+                 padding: 0.28rem 0.6rem; font-size: 0.76rem; font-weight: 600; cursor: pointer; }
     .btn-apply:hover { background: var(--green-dark); }
 
-    /* ── Poll status bar ── */
-    .status-bar {
-      display: flex; align-items: center; gap: 0.45rem;
-      font-size: 0.78rem; color: var(--gray); margin-bottom: 1rem;
-    }
+    /* ── Status dot ── */
+    .status-line { display: flex; align-items: center; gap: 0.4rem; font-size: 0.76rem; color: var(--gray); margin-bottom: 0.85rem; }
     .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .dot.idle    { background: #68d391; }
     .dot.active  { background: #f6ad55; animation: pulse 1s ease-in-out infinite; }
@@ -141,11 +91,9 @@
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     /* ── Log box ── */
-    .log-box {
-      background: #1a202c; border-radius: 8px;
-      padding: 0.85rem 1rem; height: 240px; overflow-y: auto;
-      font-family: 'Menlo','Consolas',monospace; font-size: 0.72rem; line-height: 1.65;
-    }
+    .log-box { background: #1a202c; border-radius: 7px; padding: 0.75rem 0.9rem;
+               height: 200px; overflow-y: auto;
+               font-family: 'Menlo','Consolas',monospace; font-size: 0.7rem; line-height: 1.6; }
     .log-box p          { color: #a0aec0; white-space: pre-wrap; word-break: break-all; }
     .log-box p.success  { color: #68d391; }
     .log-box p.error    { color: #fc8181; }
@@ -153,56 +101,74 @@
     .log-box p.warn     { color: #f6ad55; }
     .log-box .placeholder { color: #4a5568; font-style: italic; }
 
-    /* ── History table ── */
-    .history-scroll { max-height: 400px; overflow-y: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-    thead th {
-      text-align: left; padding: 0.5rem 0.85rem;
-      font-size: 0.68rem; text-transform: uppercase; letter-spacing: .05em; color: var(--gray);
-      border-bottom: 2px solid var(--border); position: sticky; top: 0; background: #fff;
+    /* ── Browser preview ── */
+    .browser-card { grid-column: 2; grid-row: 1 / 3; }
+    @media (max-width: 780px) { .browser-card { grid-column: 1; grid-row: auto; } }
+
+    .step-label {
+      font-size: 0.72rem; color: var(--gray);
+      background: var(--gray-light); border-radius: 5px;
+      padding: 0.25rem 0.6rem; display: inline-block; margin-bottom: 0.6rem;
     }
+    .step-label.active { background: var(--orange-bg); color: var(--orange); }
+
+    .browser-frame {
+      background: #1a202c; border-radius: 8px; overflow: hidden;
+      min-height: 320px; display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .browser-frame img { width: 100%; display: block; border-radius: 8px; }
+    .browser-placeholder {
+      text-align: center; color: #4a5568; padding: 2rem;
+      font-size: 0.82rem; line-height: 1.8;
+    }
+    .browser-placeholder .big { font-size: 2rem; margin-bottom: 0.5rem; }
+
+    .screenshot-badge {
+      position: absolute; bottom: 0.6rem; right: 0.6rem;
+      background: rgba(0,0,0,0.6); color: #a0aec0;
+      font-size: 0.65rem; padding: 0.2rem 0.5rem;
+      border-radius: 4px; font-family: monospace;
+    }
+
+    /* ── History table ── */
+    .history-card { grid-column: 1; }
+    @media (max-width: 780px) { .history-card { grid-column: 1; } }
+    .history-scroll { max-height: 280px; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
+    thead th { text-align: left; padding: 0.45rem 0.75rem;
+               font-size: 0.66rem; text-transform: uppercase; letter-spacing: .05em; color: var(--gray);
+               border-bottom: 2px solid var(--border); position: sticky; top: 0; background: #fff; }
     tbody tr { border-bottom: 1px solid var(--border); }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: var(--gray-light); }
-    tbody td { padding: 0.6rem 0.85rem; vertical-align: middle; }
+    tbody td { padding: 0.5rem 0.75rem; vertical-align: middle; }
 
-    .pill {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      border-radius: 999px; padding: 0.2rem 0.65rem;
-      font-size: 0.68rem; font-weight: 600; white-space: nowrap;
-    }
+    .pill { display: inline-flex; align-items: center; gap: 0.25rem;
+            border-radius: 999px; padding: 0.18rem 0.55rem;
+            font-size: 0.66rem; font-weight: 600; white-space: nowrap; }
     .pill-success  { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-mid); }
     .pill-no-spots { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-mid);  }
     .pill-error    { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-mid);   }
     .pill-running  { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-mid); }
 
-    .email-yes { color: var(--green); font-weight: 600; }
-    .email-no  { color: #cbd5e0; }
-    .trigger-badge {
-      font-size: 0.65rem; color: var(--gray);
-      background: var(--gray-light); border: 1px solid var(--border);
-      border-radius: 4px; padding: 0.1rem 0.4rem;
-    }
-    .spots-list { margin: 0; padding: 0; list-style: none; }
-    .spots-list li { font-size: 0.7rem; color: var(--gray); }
-    .spots-list li::before { content: '• '; color: var(--green); }
-    .empty-state { text-align: center; padding: 2.5rem; color: var(--gray); font-size: 0.82rem; }
+    .email-yes { color: var(--green); font-weight: 600; font-size: 0.75rem; }
+    .email-no  { color: #cbd5e0; font-size: 0.75rem; }
+    .trigger-badge { font-size: 0.62rem; color: var(--gray); background: var(--gray-light);
+                     border: 1px solid var(--border); border-radius: 3px; padding: 0.08rem 0.35rem; }
+    .empty-state { text-align: center; padding: 2rem; color: var(--gray); font-size: 0.8rem; }
 
-    .icon-btn {
-      background: none; border: 1px solid var(--border); border-radius: 7px;
-      padding: 0.25rem 0.55rem; cursor: pointer; font-size: 0.75rem; color: var(--gray);
-    }
+    .icon-btn { background: none; border: 1px solid var(--border); border-radius: 6px;
+                padding: 0.22rem 0.5rem; cursor: pointer; font-size: 0.73rem; color: var(--gray); }
     .icon-btn:hover { background: var(--gray-light); }
 
     /* ── Toast ── */
-    .toast {
-      position: fixed; bottom: 1.5rem; left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--green-dark); color: #fff;
-      padding: 0.6rem 1.3rem; border-radius: 999px;
-      font-size: 0.85rem; font-weight: 500;
-      transition: transform 0.3s ease; z-index: 999; pointer-events: none;
-    }
+    .toast { position: fixed; bottom: 1.5rem; left: 50%;
+             transform: translateX(-50%) translateY(80px);
+             background: var(--green-dark); color: #fff;
+             padding: 0.55rem 1.2rem; border-radius: 999px;
+             font-size: 0.82rem; font-weight: 500;
+             transition: transform 0.3s ease; z-index: 999; pointer-events: none; }
     .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
 </head>
@@ -212,10 +178,7 @@
 <div class="header">
   <div class="header-title">
     <span class="emoji">🏓</span>
-    <div>
-      <h1>Pickleball Poller</h1>
-      <p>Richmond Hill — Active Communities</p>
-    </div>
+    <div><h1>Pickleball Poller</h1><p>Richmond Hill — Active Communities</p></div>
   </div>
   <div class="badges">
     <span class="badge badge-green">Drop-in sessions</span>
@@ -241,7 +204,7 @@
   </div>
   <div class="stat-card">
     <div class="label">Last checked</div>
-    <div class="value" id="statLast" style="font-size:0.95rem">—</div>
+    <div class="value" id="statLast" style="font-size:0.9rem">—</div>
     <div class="sub" id="statLastStatus"></div>
   </div>
   <div class="stat-card">
@@ -251,21 +214,19 @@
   </div>
 </div>
 
-<!-- Main grid -->
-<div class="main">
+<!-- Layout -->
+<div class="layout">
 
-  <!-- Left: controls + log -->
+  <!-- Left top: controls -->
   <div class="card">
     <div class="card-header">
       <h2>Controls</h2>
-      <div class="status-bar" style="margin:0">
+      <div class="status-line" style="margin:0">
         <span class="dot idle" id="dot"></span>
         <span id="statusText">Loading…</span>
       </div>
     </div>
     <div class="card-body">
-
-      <!-- Poll Now (full width) -->
       <div class="btn-row">
         <button class="btn btn-poll" id="pollBtn" onclick="triggerPoll()">
           <div class="spinner"></div>
@@ -274,29 +235,24 @@
         <button class="btn btn-stop"  id="stopBtn"  onclick="stopPoll()">&#9646;&#9646; Stop</button>
         <button class="btn btn-start" id="startBtn" onclick="startPoll()">&#9654; Resume</button>
       </div>
-
-      <!-- Interval -->
       <div class="interval-row">
         <label for="intervalInput">Check every</label>
         <input type="number" id="intervalInput" min="1" max="1440" value="30" />
-        <span style="font-size:0.78rem;color:var(--gray)">min</span>
+        <span style="font-size:0.76rem;color:var(--gray)">min</span>
         <button class="btn-apply" onclick="applyInterval()">Apply</button>
       </div>
-
-      <!-- Log -->
-      <div class="status-bar">
+      <div class="status-line">
         <span class="dot idle" id="dot2"></span>
         <span id="statusText2">Idle</span>
       </div>
       <div class="log-box" id="logBox">
-        <p class="placeholder">Live log output will appear here…</p>
+        <p class="placeholder">Live log output will appear here when a poll runs…</p>
       </div>
-
     </div>
   </div>
 
-  <!-- Right: history -->
-  <div class="card">
+  <!-- Left bottom: history -->
+  <div class="card history-card">
     <div class="card-header">
       <h2>Run History</h2>
       <button class="icon-btn" onclick="loadHistory()">&#8635; Refresh</button>
@@ -306,7 +262,6 @@
         <thead>
           <tr>
             <th>Started</th>
-            <th>Duration</th>
             <th>Status</th>
             <th>Spots</th>
             <th>Email</th>
@@ -314,9 +269,26 @@
           </tr>
         </thead>
         <tbody id="historyBody">
-          <tr><td colspan="6" class="empty-state">Loading…</td></tr>
+          <tr><td colspan="5" class="empty-state">Loading history…</td></tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Right: live browser view -->
+  <div class="card browser-card">
+    <div class="card-header">
+      <h2>Live Browser View</h2>
+      <span class="step-label" id="stepLabel">Idle</span>
+    </div>
+    <div class="card-body" style="padding: 1rem;">
+      <div class="browser-frame" id="browserFrame">
+        <div class="browser-placeholder">
+          <div class="big">🖥️</div>
+          <div>No browser session active.</div>
+          <div style="color:#718096;margin-top:0.3rem">Click <strong>Poll Now</strong> to see live screenshots here.</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -325,35 +297,73 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  let firstLog = true;
-  const logBox = document.getElementById('logBox');
+  let firstLog   = true;
+  const logBox   = document.getElementById('logBox');
+  let screenshotTs = 0;
 
-  // ── Live log stream ──────────────────────────────────────────────────────────
-  const evtSource = new EventSource('/log-stream');
-  evtSource.onmessage = e => {
+  // ── Log SSE ──────────────────────────────────────────────────────────────────
+  const logEvt = new EventSource('/log-stream');
+  logEvt.onmessage = e => {
     const line = JSON.parse(e.data);
     if (firstLog) { logBox.innerHTML = ''; firstLog = false; }
-
     const p = document.createElement('p');
     p.textContent = line;
-    if      (/✅|found \d+ available/i.test(line))         p.className = 'success';
-    else if (/❌|error/i.test(line))                       p.className = 'error';
-    else if (/⚠|warn|skipped/i.test(line))                p.className = 'warn';
-    else if (/starting|navigated|loaded|logged/i.test(line)) p.className = 'info';
-
+    if      (/✅|found \d+ available/i.test(line))          p.className = 'success';
+    else if (/❌|error/i.test(line))                        p.className = 'error';
+    else if (/⚠|warn|skipped|⛔|🚫/i.test(line))           p.className = 'warn';
+    else if (/🌐|🔑|🔍|🔗|📋|📧|✔|navigat|loaded|login/i.test(line)) p.className = 'info';
     logBox.appendChild(p);
     logBox.scrollTop = logBox.scrollHeight;
 
-    if (/starting availability/i.test(line))   setRunStatus('active', 'Polling in progress…');
-    if (/no available|email alert|❌/i.test(line)) { setRunStatus('idle', `Last: ${new Date().toLocaleTimeString()}`); loadHistory(); }
-    if (/✅/.test(line))                        { setRunStatus('idle', `Spot found! ${new Date().toLocaleTimeString()}`); loadHistory(); }
+    if (/starting availability/i.test(line))       setRunStatus('active', 'Polling in progress…');
+    if (/no available|✔ browser closed/i.test(line)) { setRunStatus('idle', `Last: ${new Date().toLocaleTimeString()}`); loadHistory(); }
+    if (/✅/.test(line))                            { setRunStatus('idle', `Spot found! ${new Date().toLocaleTimeString()}`); loadHistory(); }
+    if (/❌ error/i.test(line))                     { setRunStatus('idle', 'Error — check log'); loadHistory(); }
+  };
+
+  // ── Screenshot SSE ───────────────────────────────────────────────────────────
+  const snapEvt = new EventSource('/screenshot-stream');
+  snapEvt.onmessage = e => {
+    const { img, step } = JSON.parse(e.data);
+    const frame = document.getElementById('browserFrame');
+    const label = document.getElementById('stepLabel');
+
+    label.textContent = step || '';
+    label.className   = 'step-label active';
+
+    // Replace placeholder / update existing img
+    let imgEl = frame.querySelector('img');
+    if (!imgEl) {
+      frame.innerHTML = '';
+      imgEl = document.createElement('img');
+      imgEl.alt = 'Browser screenshot';
+      frame.appendChild(imgEl);
+    }
+    imgEl.src = `data:image/jpeg;base64,${img}`;
+
+    // Timestamp badge
+    let badge = frame.querySelector('.screenshot-badge');
+    if (!badge) { badge = document.createElement('div'); badge.className = 'screenshot-badge'; frame.appendChild(badge); }
+    badge.textContent = new Date().toLocaleTimeString();
+  };
+
+  snapEvt.onerror = () => {
+    // Reset step label when stream closes (poll finished)
+    setTimeout(() => {
+      document.getElementById('stepLabel').className = 'step-label';
+    }, 2000);
   };
 
   // ── Poll Now ─────────────────────────────────────────────────────────────────
   async function triggerPoll() {
     const btn = document.getElementById('pollBtn');
-    btn.disabled = true;
-    btn.classList.add('loading');
+    btn.disabled = true; btn.classList.add('loading');
+    // Clear old screenshot
+    document.getElementById('browserFrame').innerHTML =
+      `<div class="browser-placeholder"><div class="big">⏳</div><div>Starting browser…</div></div>`;
+    document.getElementById('stepLabel').textContent = 'Starting…';
+    document.getElementById('stepLabel').className   = 'step-label active';
+
     const res  = await fetch('/poll', { method: 'POST' }).catch(() => null);
     const data = res && await res.json().catch(() => ({}));
     if (!res || !res.ok) {
@@ -367,120 +377,109 @@
 
   // ── Stop / Start ─────────────────────────────────────────────────────────────
   async function stopPoll() {
-    const res  = await fetch('/poll/stop', { method: 'POST' });
-    const data = await res.json();
-    showToast('Scheduler stopped');
-    applyServerState(data);
+    const data = await fetch('/poll/stop', { method: 'POST' }).then(r => r.json());
+    showToast('Scheduler stopped'); applyServerState(data);
   }
-
   async function startPoll() {
-    const res  = await fetch('/poll/start', { method: 'POST' });
-    const data = await res.json();
-    showToast('Scheduler resumed');
-    applyServerState(data);
+    const data = await fetch('/poll/start', { method: 'POST' }).then(r => r.json());
+    showToast('Scheduler resumed'); applyServerState(data);
   }
 
-  // ── Change interval ───────────────────────────────────────────────────────────
+  // ── Interval ──────────────────────────────────────────────────────────────────
   async function applyInterval() {
     const mins = parseInt(document.getElementById('intervalInput').value);
-    if (!mins || mins < 1) { showToast('Please enter a valid number of minutes'); return; }
-    const res  = await fetch('/poll/interval', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    if (!mins || mins < 1) { showToast('Enter a valid number of minutes'); return; }
+    const data = await fetch('/poll/interval', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ minutes: mins }),
-    });
-    const data = await res.json();
-    showToast(`Interval set to ${mins} min`);
-    applyServerState(data);
+    }).then(r => r.json());
+    showToast(`Interval set to ${mins} min`); applyServerState(data);
   }
 
-  // ── Sync UI with server state ─────────────────────────────────────────────────
+  // ── Sync UI from server state ─────────────────────────────────────────────────
   function applyServerState({ isPolling, intervalMinutes, pollInProgress }) {
-    const dot      = document.getElementById('dot');
-    const statusTx = document.getElementById('statusText');
-    const stopBtn  = document.getElementById('stopBtn');
-    const startBtn = document.getElementById('startBtn');
+    const dot  = document.getElementById('dot');
+    const txt  = document.getElementById('statusText');
 
     if (pollInProgress) {
-      dot.className = 'dot active'; statusTx.textContent = 'Polling in progress…';
+      dot.className = 'dot active'; txt.textContent = 'Polling in progress…';
     } else if (isPolling) {
-      dot.className = 'dot idle';   statusTx.textContent = `Polling every ${intervalMinutes} min`;
+      dot.className = 'dot idle';   txt.textContent = `Polling every ${intervalMinutes} min`;
     } else {
-      dot.className = 'dot stopped'; statusTx.textContent = 'Scheduler stopped';
+      dot.className = 'dot stopped'; txt.textContent = 'Scheduler stopped';
     }
 
-    stopBtn.disabled  = !isPolling;
-    startBtn.disabled = isPolling;
+    document.getElementById('stopBtn').disabled  = !isPolling;
+    document.getElementById('startBtn').disabled = isPolling;
 
     if (intervalMinutes) {
-      document.getElementById('intervalInput').value   = intervalMinutes;
+      document.getElementById('intervalInput').value    = intervalMinutes;
       document.getElementById('intervalBadge').textContent = `Every ${intervalMinutes} min`;
-      document.getElementById('statScheduler').textContent = isPolling ? '&#128994; Running' : '&#128308; Stopped';
+      document.getElementById('statScheduler').innerHTML   = isPolling ? '&#128994; Running' : '&#128308; Stopped';
       document.getElementById('statInterval').textContent  = `${intervalMinutes} min interval`;
     }
   }
 
   async function syncStatus() {
-    const res  = await fetch('/status').catch(() => null);
-    if (!res) return;
-    const data = await res.json();
-    applyServerState(data);
+    const res = await fetch('/status').catch(() => null);
+    if (res?.ok) applyServerState(await res.json());
   }
 
   // ── History ───────────────────────────────────────────────────────────────────
   async function loadHistory() {
-    const res  = await fetch('/api/history').catch(() => null);
-    if (!res || !res.ok) return;
-    const runs = await res.json();
+    let runs = [];
+    try {
+      const res = await fetch('/api/history');
+      if (res.ok) runs = await res.json();
+    } catch (e) {
+      document.getElementById('historyBody').innerHTML =
+        `<tr><td colspan="5" class="empty-state">Could not load history: ${e.message}</td></tr>`;
+      return;
+    }
 
     // Stats
     const totalSpots  = runs.reduce((s, r) => s + (r.spotsFound?.length || 0), 0);
     const totalEmails = runs.filter(r => r.emailSent).length;
     const last        = runs.find(r => r.status !== 'running');
-
     document.getElementById('statTotal').textContent  = runs.length;
     document.getElementById('statSpots').textContent  = totalSpots;
     document.getElementById('statEmails').textContent = totalEmails;
-
     if (last) {
       document.getElementById('statLast').textContent       = fmtDate(last.finishedAt || last.startedAt);
       document.getElementById('statLastStatus').textContent =
-        last.status === 'success'  ? '🟢 Spots found'     :
-        last.status === 'no_spots' ? '🔵 None available'  :
-        last.status === 'error'    ? '🔴 Error'            : '';
+        last.status === 'success'  ? '🟢 Spots found'    :
+        last.status === 'no_spots' ? '🔵 None available' :
+        last.status === 'error'    ? '🔴 Error'           : '';
     }
 
     // Table
     const tbody = document.getElementById('historyBody');
     if (!runs.length) {
-      tbody.innerHTML = `<tr><td colspan="6" class="empty-state">No runs yet.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No runs yet — click Poll Now to start.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = runs.map(run => {
-      const dur = (run.startedAt && run.finishedAt)
-        ? `${Math.round((new Date(run.finishedAt) - new Date(run.startedAt)) / 1000)}s`
-        : run.status === 'running' ? '…' : '—';
-
       const pill = {
-        success:  `<span class="pill pill-success">&#10003; Spots found</span>`,
+        success:  `<span class="pill pill-success">&#10003; Found</span>`,
         no_spots: `<span class="pill pill-no-spots">No spots</span>`,
         error:    `<span class="pill pill-error" title="${esc(run.error||'')}">&#10007; Error</span>`,
         running:  `<span class="pill pill-running">Running…</span>`,
       }[run.status] || `<span class="pill">${esc(run.status)}</span>`;
 
+      const dur = (run.startedAt && run.finishedAt)
+        ? ` <span style="color:var(--gray);font-size:0.68rem">${Math.round((new Date(run.finishedAt)-new Date(run.startedAt))/1000)}s</span>`
+        : '';
+
       const spots = run.spotsFound?.length
-        ? `<ul class="spots-list">${run.spotsFound.map(s=>`<li>${esc(s.name)}</li>`).join('')}</ul>`
-        : `<span style="color:#cbd5e0">—</span>`;
+        ? `<span style="color:var(--green);font-weight:600">${run.spotsFound.length}</span>`
+        : `<span style="color:#cbd5e0">0</span>`;
 
       return `<tr>
-        <td style="white-space:nowrap">
-          <div style="font-weight:500">${fmtDate(run.startedAt)}</div>
-        </td>
-        <td style="color:var(--gray)">${dur}</td>
+        <td><div style="font-weight:500;white-space:nowrap">${fmtDate(run.startedAt)}${dur}</div></td>
         <td>${pill}</td>
         <td>${spots}</td>
-        <td>${run.emailSent ? '<span class="email-yes">&#10003; Sent</span>' : '<span class="email-no">—</span>'}</td>
+        <td>${run.emailSent ? '<span class="email-yes">&#10003;</span>' : '<span class="email-no">—</span>'}</td>
         <td><span class="trigger-badge">${esc(run.triggeredBy||'schedule')}</span></td>
       </tr>`;
     }).join('');
@@ -488,7 +487,7 @@
 
   // ── Helpers ───────────────────────────────────────────────────────────────────
   function setRunStatus(state, text) {
-    document.getElementById('dot2').className     = `dot ${state}`;
+    document.getElementById('dot2').className = `dot ${state}`;
     document.getElementById('statusText2').textContent = text;
   }
 
@@ -500,21 +499,20 @@
   }
 
   function esc(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   function showToast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
+    t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2800);
   }
 
   // ── Init ──────────────────────────────────────────────────────────────────────
   syncStatus();
   loadHistory();
-  setInterval(syncStatus,    10000);   // sync scheduler state every 10s
-  setInterval(loadHistory,   60000);   // refresh history every 60s
+  setInterval(syncStatus,  10000);
+  setInterval(loadHistory, 30000);
 </script>
 </body>
 </html>
